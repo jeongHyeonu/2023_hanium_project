@@ -11,4 +11,9 @@ public class lifeJacket : MonoBehaviour
     {
         Instantiate(equipedJacketModel, targetObj.transform);
     }
+
+    public void ChangeHandPos()
+    {
+
+    }
 }
