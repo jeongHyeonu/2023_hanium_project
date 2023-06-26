@@ -46,14 +46,14 @@ partial class MenuManager : MonoBehaviour
     private void Start()
     {
 
-        // 텍스트 파일 불러오기, 나중에 tts 기능 넣을때 사용 예정
-        List<Dictionary<string, object>> list = CSVReader.Read("Localization/MenuScript");
+        //// 텍스트 파일 불러오기, 나중에 tts 기능 넣을때 사용 예정
+        //List<Dictionary<string, object>> list = CSVReader.Read("Localization/MenuScript");
 
-        for (int i = 0; i < list.Count; i++)
-        {
-            Debug.Log(list[i]["English(en)"].ToString());
-            Debug.Log(list[i]["Korean(ko)"].ToString());
-        }
+        //for (int i = 0; i < list.Count; i++)
+        //{
+        //    Debug.Log(list[i]["English(en)"].ToString());
+        //    Debug.Log(list[i]["Korean(ko)"].ToString());
+        //}
 
     }
 }
