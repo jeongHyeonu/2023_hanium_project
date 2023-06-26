@@ -56,8 +56,27 @@ public partial class TutorialManager : MonoBehaviour
     public void NextButtonOnClick()
     {
         curTextIndex++;
-        if (curTextIndex == 3) OpenTutorialInfo();
-        if (curTextIndex == 7) CloseTutorialInfo();
+        switch (curTextIndex)
+        {
+            case 2:
+                OpenTutorialInfo();
+                break;
+            case 3:
+                tutorialInfo.transform.GetChild(0).gameObject.SetActive(false);
+                tutorialInfo.transform.GetChild(1).gameObject.SetActive(true);
+                break;
+            case 4:
+                tutorialInfo.transform.GetChild(1).gameObject.SetActive(false);
+                tutorialInfo.transform.GetChild(2).gameObject.SetActive(true);
+                break;
+            case 5:
+                tutorialInfo.transform.GetChild(2).gameObject.SetActive(false);
+                tutorialInfo.transform.GetChild(3).gameObject.SetActive(true);
+                break;
+            case 6:
+                CloseTutorialInfo();
+                break;
+        }
         nextButton.SetActive(false);
 
         // 튜토리얼 텍스트 인덱스가 최대치면 오브젝트 상호작용 연습으로, 아니면 다음 텍스트 출력 코루틴 실행
