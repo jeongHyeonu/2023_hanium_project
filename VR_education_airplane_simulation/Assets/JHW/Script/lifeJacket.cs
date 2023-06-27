@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class lifeJacket : MonoBehaviour
+partial class lifeJacket : MonoBehaviour
 {
     [SerializeField] GameObject equipedJacketModel;
     [SerializeField] GameObject targetObj;
@@ -91,3 +91,5 @@ public class lifeJacket : MonoBehaviour
         beltPos[CharacterCenter.transform.childCount - 1].transform.rotation = Quaternion.Euler(0, 0, 90);
     }
 }
+
+
