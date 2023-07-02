@@ -118,8 +118,6 @@ partial class TutorialManager
 
         // 자막 변경
         string key = "tutorial_grab";
-
-        Debug.Log(localizeStringEvent.StringReference.GetLocalizedString(key));
         localizeStringEvent.StringReference.SetReference("TutorialScript", key);
         TextToSpeach.Instance.SpeechText(localizeStringEvent.StringReference.GetLocalizedString(key));
     }
