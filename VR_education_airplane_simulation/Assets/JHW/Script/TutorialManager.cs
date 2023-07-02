@@ -49,6 +49,10 @@ public partial class TutorialManager : MonoBehaviour
     {
         scriptText.text = "";
         scriptText.DOText(scriptList[curTextIndex], (scriptList[curTextIndex]).Length * 0.1f);
+        // 글씨 크기에 따른 글씨 자막바 조정
+        //if ((scriptList[curTextIndex]).Length >= 30) scriptText.transform.parent.GetComponent<RectTransform>().DOScaleY(1.5f, .5f);
+        //else { scriptText.transform.parent.GetComponent<RectTransform>().DOScaleY(1f, .5f); }
+        TextToSpeach.Instance.SpeechText(scriptList[curTextIndex]);
         yield return new WaitForSeconds((scriptList[curTextIndex]).Length * 0.1f);
         nextButton.SetActive(true);
     }
@@ -113,14 +117,22 @@ partial class TutorialManager
         tutorialObjects.SetActive(true);
 
         // 자막 변경
-        string key = "tutorial_practice";
+        string key = "tutorial_grab";
+
+        Debug.Log(localizeStringEvent.StringReference.GetLocalizedString(key));
         localizeStringEvent.StringReference.SetReference("TutorialScript", key);
+        TextToSpeach.Instance.SpeechText(localizeStringEvent.StringReference.GetLocalizedString(key));
     }
     
     public void TutorialObject01Selected()
     {
         isSelected = true; // 물체 잡고있는지 여부
         isTriggered = false; // 상호작용여부
+
+        // 자막 변경 및 tts
+        string key = "tutorial_trigger";
+        localizeStringEvent.StringReference.SetReference("TutorialScript", key);
+        TextToSpeach.Instance.SpeechText(localizeStringEvent.StringReference.GetLocalizedString(key));
 
         // UX.. 하드코딩 죄송합니다
         book.transform.GetChild(0).gameObject.SetActive(false); // Grab ux off
@@ -131,6 +143,8 @@ partial class TutorialManager
     {
         isSelected = false; // 물체 잡고있는지 여부
         dropObj.SetActive(false);
+
+
 
         // 물체 놓으면 원래 위치와 놓아야 할 위치 사이 거리 체크
         Debug.Log(Vector3.Distance(targetObj.transform.position, dropPosObj.transform.position));
@@ -149,6 +163,11 @@ partial class TutorialManager
                 bookOpen.SetActive(false);
             }
 
+            // 자막 변경 및 tts
+            string key = "tutorial_grab";
+            localizeStringEvent.StringReference.SetReference("TutorialScript", key);
+            TextToSpeach.Instance.SpeechText(localizeStringEvent.StringReference.GetLocalizedString(key));
+
             // UX.. 하드코딩 죄송합니다
             book.transform.GetChild(0).gameObject.SetActive(true); // Grab ux on
             book.transform.GetChild(1).gameObject.SetActive(false); // Trigger ux of
@@ -158,7 +177,11 @@ partial class TutorialManager
             targetObj.SetActive(false);
             dropObj.transform.GetChild(0).gameObject.SetActive(false);
             dropObj.transform.GetChild(0).gameObject.SetActive(true);
-            Debug.Log("튜토리얼 클리어!");
+
+            // 자막 변경 및 tts
+            string key = "tutorial_clear";
+            localizeStringEvent.StringReference.SetReference("TutorialScript", key);
+            TextToSpeach.Instance.SpeechText(localizeStringEvent.StringReference.GetLocalizedString(key));
         }
 
     }
@@ -175,6 +198,13 @@ partial class TutorialManager
             dropObj.SetActive(true);
             book.SetActive(false);
             bookOpen.SetActive(true);
+
+            // 자막 변경 및 tts
+            string key = "tutorial_drop";
+            localizeStringEvent.StringReference.SetReference("TutorialScript", key);
+            TextToSpeach.Instance.SpeechText(localizeStringEvent.StringReference.GetLocalizedString(key));
         }
+
+
     }
 }

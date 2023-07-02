@@ -24,8 +24,125 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9ad91d309797bb2468ef50ffb44a4890, type: 2}
   - {fileID: 11400000, guid: 7fbd24193c6dbda41a0f5e419c45c966, type: 2}
   - {fileID: 11400000, guid: 20c02b58c0d505e44ba8b1192d53b4aa, type: 2}
-  m_Extensions: []
+  m_Extensions:
+  - rid: 6894163972832886784
   m_Group: String Table
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6894163972832886784
+      type: {class: CsvExtension, ns: UnityEditor.Localization.Plugins.CSV, asm: Unity.Localization.Editor}
+      data:
+        m_Collection: {fileID: 11400000}
+        m_ColumnsList:
+        - rid: 6894163972832886785
+        - rid: 6894163972832886786
+        - rid: 6894163972832886787
+        - rid: 6894163972832886788
+        - rid: 6894163972832886789
+        - rid: 6894163972832886790
+        - rid: 6894163972832886791
+        - rid: 6894163972832886792
+        - rid: 6894163972832886793
+        - rid: 6894163972832886794
+        - rid: 6894163972832886795
+        m_ConnectedFile: 
+    - rid: 6894163972832886785
+      type: {class: KeyIdColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_IncludeId: 1
+        m_IncludeSharedComments: 0
+        m_KeyFieldName: Key
+        m_IdFieldName: Id
+        m_CommentFieldName: Shared Comments
+    - rid: 6894163972832886786
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: zh
+        m_FieldName: Chinese (Simplified)(zh)
+        m_CommentFieldName: Chinese (Simplified)(zh) Comments
+        m_IncludeComments: 0
+    - rid: 6894163972832886787
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: en
+        m_FieldName: English(en)
+        m_CommentFieldName: English(en) Comments
+        m_IncludeComments: 0
+    - rid: 6894163972832886788
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: fr
+        m_FieldName: French(fr)
+        m_CommentFieldName: French(fr) Comments
+        m_IncludeComments: 0
+    - rid: 6894163972832886789
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: de
+        m_FieldName: German(de)
+        m_CommentFieldName: German(de) Comments
+        m_IncludeComments: 0
+    - rid: 6894163972832886790
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: it
+        m_FieldName: Italian(it)
+        m_CommentFieldName: Italian(it) Comments
+        m_IncludeComments: 0
+    - rid: 6894163972832886791
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: ja
+        m_FieldName: Japanese(ja)
+        m_CommentFieldName: Japanese(ja) Comments
+        m_IncludeComments: 0
+    - rid: 6894163972832886792
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: ko
+        m_FieldName: Korean(ko)
+        m_CommentFieldName: Korean(ko) Comments
+        m_IncludeComments: 0
+    - rid: 6894163972832886793
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: pl
+        m_FieldName: Polish(pl)
+        m_CommentFieldName: Polish(pl) Comments
+        m_IncludeComments: 0
+    - rid: 6894163972832886794
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: ru
+        m_FieldName: Russian(ru)
+        m_CommentFieldName: Russian(ru) Comments
+        m_IncludeComments: 0
+    - rid: 6894163972832886795
+      type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_LocaleIdentifier:
+          m_Code: es
+        m_FieldName: Spanish(es)
+        m_CommentFieldName: Spanish(es) Comments
+        m_IncludeComments: 0
