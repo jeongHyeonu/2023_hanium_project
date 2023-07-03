@@ -83,6 +83,9 @@ public partial class TutorialManager : MonoBehaviour
         }
         nextButton.SetActive(false);
 
+        // 사운드
+        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button1);
+
         // 튜토리얼 텍스트 인덱스가 최대치면 오브젝트 상호작용 연습으로, 아니면 다음 텍스트 출력 코루틴 실행
         if (curTextIndex == maxTextIndex) StartPracticeTutorial();
         else StartCoroutine(NextScript());
