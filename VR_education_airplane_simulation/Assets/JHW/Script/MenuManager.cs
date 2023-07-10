@@ -4,8 +4,6 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using System.IO;
-using UnityEngine.Localization.Tables;
-using UnityEditor.Localization;
 using static UnityEngine.Rendering.DebugUI;
 using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
