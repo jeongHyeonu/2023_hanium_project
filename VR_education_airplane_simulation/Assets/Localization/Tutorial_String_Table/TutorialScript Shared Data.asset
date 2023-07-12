@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: TutorialScript Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: TutorialScript
+  m_TableCollectionNameGuidString: 9ffa009dde4d1824e8eeb171fb451afd
+  m_Entries:
+  - m_Id: 20111368192
+    m_Key: tutorial_script1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 59541265522688
+    m_Key: tutorial_script2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 61153342070784
+    m_Key: tutorial_script3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 62112763944960
+    m_Key: tutorial_script4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 62621130366976
+    m_Key: tutorial_script5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 62912076652544
+    m_Key: tutorial_script6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63148840919040
+    m_Key: tutorial_script7
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63658356580352
+    m_Key: grabScript
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74272869130240
+    m_Key: dropScript
+    m_Metadata:
+      m_Items: []
+  - m_Id: 74299842699264
+    m_Key: triggerScript
+    m_Metadata:
+      m_Items: []
+  - m_Id: 90756643233792
+    m_Key: tutorial_grab
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2613694869217280
+    m_Key: tutorial_trigger
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2616785907687424
+    m_Key: tutorial_drop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2617239798489088
+    m_Key: tutorial_clear
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 6894163874238169094
+  references:
+    version: 2
+    RefIds:
+    - rid: 6894163874238169094
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
+        asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1687659734587
