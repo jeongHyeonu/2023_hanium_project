@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -93,6 +94,10 @@ partial class lifeJacket : MonoBehaviour
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
 
+        // 상호작용 불가능하게 변경
+        BeltStartPos.transform.parent.GetComponent<XRGrabInteractable>().enabled = false;
+        BeltStartPos.transform.parent.GetChild(1).gameObject.SetActive(false);
+
         // 자막 다 읽고나서 이동
         StartCoroutine(MoveToExit(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3.0f));
 
@@ -101,7 +106,7 @@ partial class lifeJacket : MonoBehaviour
             //beltPos[i].transform.position = new Vector3(beltPos[i].transform.position.x, BeltEndPos.transform.position.y, beltPos[i].transform.position.z);
             beltPos[i].transform.DOMove(CharacterCenter.transform.GetChild(i).position, .5f);
         }
-        beltPos[CharacterCenter.transform.childCount - 1].transform.rotation = Quaternion.Euler(0, 0, 90);
+        beltPos[CharacterCenter.transform.childCount - 1].transform.rotation = Quaternion.Euler(180, 0, 90);
 
 
     }
@@ -191,6 +196,35 @@ partial class lifeJacket
         jacketTube.GetComponent<Transform>().DOScale(130f, .5f);
         leftHandle.SetActive(false);
         rightHandle.SetActive(false);
+
+        // 자막 변경
+        string key = "lifeJacket_script7";
+        txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
+        TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
+        txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
+
+        StartCoroutine(ToMainTitle(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3f)); // 다음 스크립트로
+    }
+
+    IEnumerator ToMainTitle(float _duration)
+    {
+        // 자막 다 읽을때까지 대기
+        yield return new WaitForSeconds(_duration);
+
+        // 자막 변경
+        string key = "lifeJacket_script8";
+        txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
+        TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
+        txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
+
+        // 타이틀 이동
+        Invoke("GoToMain", _duration + 3f);
+    }
+
+    void GoToMain()
+    {
+        // 타이틀로 이동
+        SceneManager.LoadScene("MainTitle");
     }
 }
 
