@@ -35,7 +35,7 @@ partial class jacketBag : MonoBehaviour
         jacket_grabUI.SetActive(true);
         jacket_triggerUI.SetActive(false);
         jacket_model.gameObject.transform.position = jacket_originPosObj.transform.position;
-        jacket_model.gameObject.transform.eulerAngles = Vector3.zero;
+        //jacket_model.gameObject.transform.eulerAngles = Vector3.zero;
     }
 
     public void JacketBagTriggered(XRBaseInteractor interactor)

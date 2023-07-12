@@ -7,6 +7,7 @@ using DG.Tweening;
 using UnityEngine.UI;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization;
+using UnityEngine.SceneManagement;
 
 public partial class TutorialManager : MonoBehaviour
 {
@@ -183,8 +184,18 @@ partial class TutorialManager
             string key = "tutorial_clear";
             localizeStringEvent.StringReference.SetReference("TutorialScript", key);
             TextToSpeach.Instance.SpeechText(localizeStringEvent.StringReference.GetLocalizedString(key));
+
+
+            // 타이틀 이동
+            Invoke("GoToMain", localizeStringEvent.StringReference.GetLocalizedString(key).Length*0.1f + 3f);
+
         }
 
+    }
+
+    private void GoToMain()
+    {             // 타이틀로 이동
+        SceneManager.LoadScene("MainTitle");
     }
 
     public void TutorialObject01Triggered() // 물체 잡고있을때 상호작용
