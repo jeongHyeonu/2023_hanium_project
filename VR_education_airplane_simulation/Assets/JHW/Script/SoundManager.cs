@@ -2,6 +2,7 @@ using Amazon.Runtime.Internal.Transform;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public partial class SoundManager : MonoBehaviour
 {
@@ -40,6 +41,9 @@ public partial class SoundManager : MonoBehaviour {
 
     [SerializeField] GameObject BGM_speaker;
     [SerializeField] GameObject SFX_speaker;
+
+    [SerializeField] float BGM_volumeScale;
+    [SerializeField] float SFX_volumeScale;
 
     [System.Serializable]
     [SerializeField]
@@ -87,10 +91,19 @@ public partial class SoundManager : MonoBehaviour {
         }
     }
 
-    // 배경음 재생
-    public void PlayBGM()
+    // 배경음 조정
+    public void volumeScale_BGM_OnChange(GameObject slider)
     {
-        
+        BGM_volumeScale = slider.GetComponent<Slider>().value;
+        BGM_speaker.GetComponent<AudioSource>().volume = BGM_volumeScale;
+    }
+
+    // 효과음 조정
+    public void volumeScale_SFX_OnChange(GameObject slider)
+    {
+        SFX_volumeScale = slider.GetComponent<Slider>().value;
+        SFX_speaker.GetComponent<AudioSource>().volume = SFX_volumeScale;
+        TextToSpeach.Instance.GetComponent<AudioSource>().volume = SFX_volumeScale;
     }
 
 
@@ -104,6 +117,6 @@ public partial class SoundManager : MonoBehaviour {
     // 효과음 재생
     public void PlaySFX(SFX_list sfx)
     {
-        SFX_speaker.GetComponent<AudioSource>().PlayOneShot(SFX_audioclips[sfx]);
+        SFX_speaker.GetComponent<AudioSource>().PlayOneShot(SFX_audioclips[sfx], SFX_volumeScale);
     }
 }
