@@ -203,22 +203,23 @@ partial class lifeJacket
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
 
-        StartCoroutine(ToMainTitle(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3f)); // 다음 스크립트로
+        StartCoroutine(NextScript(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3f,8)); // 다음 스크립트로
     }
 
-    IEnumerator ToMainTitle(float _duration)
+    IEnumerator NextScript(float _duration, int _key)
     {
         // 자막 다 읽을때까지 대기
         yield return new WaitForSeconds(_duration);
 
         // 자막 변경
-        string key = "lifeJacket_script8";
+        string key = "lifeJacket_script" + _key;
         txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
 
-        // 타이틀 이동
-        Invoke("GoToMain", _duration + 3f);
+        // 설명 다하면(key = 11 이면) 다음 교육 챕터로 이동, 아직 설명 다 안했으면 다음 스크립트실행
+        if (_key == 11) { Invoke("GoToMain", txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3f); }
+        else { StartCoroutine(NextScript(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f+3f, _key+1)); }
     }
 
     void GoToMain()
