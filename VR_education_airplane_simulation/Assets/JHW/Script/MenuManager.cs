@@ -30,8 +30,7 @@ partial class MenuManager : MonoBehaviour
     public void MenuButton_Tutorial_OnMouseClick()
     {
         // 버튼 클릭시 실행할 함수
-        SceneManager.LoadScene("Tutorial");
-        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
+
     }
 
     // 필수 안전교육 버튼 클릭시
@@ -50,30 +49,40 @@ partial class MenuManager : MonoBehaviour
         SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
     }
 
-    // Chapter 1
-    public void MenuButton_Chapter1_OnMouseClick()
+    public void MenuButton_Chapter_OnMouseClick(int chap_num)
     {
-        // 버튼 클릭시 실행할 함수
-        SceneManager.LoadScene("EduSafetyBelt");
+        // 사운드
         SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
-    }
 
-    // Chapter 3
-    public void MenuButton_Chapter3_OnMouseClick()
-    {
-        //SceneManager.SetActiveScene(SceneManager.GetSceneByName("EduGuideSafetyRules"));
+        // 챕터 넘버에 따라 실행하는 명령 다름
         // 버튼 클릭시 실행할 함수
-        SceneManager.LoadScene("EduGuideSafetyRules");
-        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
-    }
-
-    // Chapter 5
-    public void MenuButton_Chapter5_OnMouseClick()
-    {
-        //SceneManager.SetActiveScene(SceneManager.GetSceneByName("EduLifeJacket"));
-        // 버튼 클릭시 실행할 함수
-        SceneManager.LoadScene("EduLifeJacket");
-        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
+        switch (chap_num)
+        {
+            case 0: // 튜토리얼
+                SceneManager.LoadScene("Tutorial");
+                break;
+            case 1: // 안전벨트
+                SceneManager.LoadScene("EduSafetyBelt");
+                break;
+            //case 2:
+            //    break;
+            case 3:
+                SceneManager.LoadScene("EduGuideSafetyRules");
+                break;
+            //case 4:
+            //    break;
+            case 5:
+                SceneManager.LoadScene("EduLifeJacket");
+                break;
+            case 6:
+                SceneManager.LoadScene("EduAntiShockPosture");
+                break;
+            case 7:
+                SceneManager.LoadScene("EduEmergencyEscape");
+                break;
+            default:
+                break;
+        }
     }
 
     // 설정 버튼

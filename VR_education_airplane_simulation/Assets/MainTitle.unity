@@ -4284,12 +4284,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1525147342}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: MenuButton_Chapter5_OnMouseClick
-        m_Mode: 1
+        m_MethodName: MenuButton_Chapter_OnMouseClick
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -4558,8 +4558,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1525147342}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: MenuButton_Tutorial_OnMouseClick
-        m_Mode: 1
+        m_MethodName: MenuButton_Chapter_OnMouseClick
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5120,7 +5120,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 653296217}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1525147342}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: MenuButton_Chapter_OnMouseClick
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 7
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &653296217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5825,7 +5837,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 751283871}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1525147342}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: MenuButton_Chapter_OnMouseClick
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 6
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &751283871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10582,7 +10606,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1525147341}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ff590cd8c7e4514c8ee23d7cdbd06a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e54887dae7499a419b95aa370aefca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainTitle: {fileID: 2101512399}
@@ -11529,12 +11553,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1525147342}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: MenuButton_Chapter1_OnMouseClick
-        m_Mode: 1
+        m_MethodName: MenuButton_Chapter_OnMouseClick
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -12784,12 +12808,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1525147342}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: MenuButton_Chapter3_OnMouseClick
-        m_Mode: 1
+        m_MethodName: MenuButton_Chapter_OnMouseClick
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
