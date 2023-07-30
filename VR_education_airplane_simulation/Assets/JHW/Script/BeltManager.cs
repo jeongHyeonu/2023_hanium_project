@@ -38,7 +38,7 @@ partial class BeltManager : MonoBehaviour
             case 3: // 승무원 설명 다 하면 벨트 오브젝트 활성화, 다음 버튼 비활성화, 승무원캠 off
                 belt1.SetActive(true);
                 belt2.SetActive(true);
-                cam.gameObject.SetActive(false);
+                //cam.gameObject.SetActive(false);
                 break;
             case 6: // ux 및 상호작용 활성화
                 beltEndPos2.GetComponent<XRGrabInteractable>().enabled = true;
@@ -76,7 +76,7 @@ partial class BeltManager : MonoBehaviour
     [SerializeField] GameObject beltLinekdPos2;
     [SerializeField] GameObject beltLinekdPos3;
 
-    [SerializeField] GameObject cam;
+    //[SerializeField] GameObject cam;
     bool isLinked;
 
     public void beltSelectEntered()
