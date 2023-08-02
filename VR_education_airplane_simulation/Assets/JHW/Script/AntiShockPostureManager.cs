@@ -25,6 +25,9 @@ public class AntiShockPostureManager : MonoBehaviour
     // 자막 다음버튼
     [SerializeField] GameObject nextButton;
 
+    // 승무원
+    [SerializeField] GameObject stewardess;
+
     int scriptIndex = 0;
 
     bool isRightLeg;
@@ -44,6 +47,7 @@ public class AntiShockPostureManager : MonoBehaviour
         string scriptValue = localizeStringEvent.StringReference.GetLocalizedString(key);
         TextToSpeach.Instance.SpeechText(scriptValue);
         scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("");
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
 
         switch (scriptIndex)
         {

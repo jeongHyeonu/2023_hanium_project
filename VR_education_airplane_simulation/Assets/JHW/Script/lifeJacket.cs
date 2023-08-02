@@ -26,6 +26,9 @@ partial class lifeJacket : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI txt; // 자막
 
+    // 승무원
+    [SerializeField] GameObject stewardess;
+
     private Vector3 originLifeJacketPos;
     private Vector3 originBeltStartPos;
     private Vector3 originBeltEndPos;
@@ -61,6 +64,7 @@ partial class lifeJacket : MonoBehaviour
         txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
     }
     public void JacketBeltSelectEntered(XRBaseInteractor interactor)
     {
@@ -93,6 +97,7 @@ partial class lifeJacket : MonoBehaviour
         txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
 
         // 상호작용 불가능하게 변경
         BeltStartPos.transform.parent.GetComponent<XRGrabInteractable>().enabled = false;
@@ -142,7 +147,7 @@ partial class lifeJacket
         txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
-
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
         // 자막 다 읽으면 다음 스크립트 진행
         StartCoroutine(InflateJacket(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3.0f));
     }
@@ -157,7 +162,7 @@ partial class lifeJacket
         txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
-
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
         // 왼쪽 손잡이, 오른쪽 손잡이 setActive true
         leftHandle.SetActive(true);
         rightHandle.SetActive(true);
@@ -202,6 +207,7 @@ partial class lifeJacket
         txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
 
         StartCoroutine(NextScript(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3f,8)); // 다음 스크립트로
     }
@@ -216,6 +222,7 @@ partial class lifeJacket
         txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
 
         // 설명 다하면(key = 11 이면) 다음 교육 챕터로 이동, 아직 설명 다 안했으면 다음 스크립트실행
         if (_key == 11) { Invoke("GoToMain", txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3f); }
