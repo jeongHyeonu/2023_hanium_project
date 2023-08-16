@@ -8,4 +8,9 @@ public class Stewardess : MonoBehaviour
     {
         this.GetComponent<Animator>().SetBool("Talk", false);
     }
+
+    public void OpenStop()
+    {
+        this.GetComponent<Animator>().SetBool("Open", false);
+    }
 }
