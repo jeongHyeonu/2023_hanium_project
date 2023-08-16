@@ -15,6 +15,8 @@ partial class jacketBag : MonoBehaviour
     [SerializeField] GameObject jacket_lifeJacketObj;
     [SerializeField] TextMeshProUGUI txt;
 
+    [SerializeField] GameObject stewardess;
+
     private void Start()
     {
         // 자막 변경
@@ -22,6 +24,7 @@ partial class jacketBag : MonoBehaviour
         txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
     }
 
     public void JacketBagSelected(XRBaseInteractor interactor)
@@ -48,5 +51,6 @@ partial class jacketBag : MonoBehaviour
         txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
         TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
         txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
     }
 }

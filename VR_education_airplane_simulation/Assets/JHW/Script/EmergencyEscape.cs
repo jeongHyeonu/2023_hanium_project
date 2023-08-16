@@ -32,6 +32,9 @@ public class EmergencyEscape : MonoBehaviour
     // 자막 다음버튼
     [SerializeField] GameObject nextButton;
 
+    // 승무원
+    [SerializeField] GameObject stewardess;
+
     int scriptIndex = 0;
 
     TextMeshProUGUI originText;
@@ -52,6 +55,7 @@ public class EmergencyEscape : MonoBehaviour
         if (scriptText.text.Length < 50) scriptText.fontSize = 20; else scriptText.fontSize = 15; // 폰트 길이에 따라 크기조절
         TextToSpeach.Instance.SpeechText(scriptValue);
         scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("");
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
 
         switch (scriptIndex)
         {

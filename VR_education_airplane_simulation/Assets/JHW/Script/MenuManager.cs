@@ -15,7 +15,8 @@ using TMPro;
 partial class MenuManager : MonoBehaviour
 {
     [SerializeField] GameObject mainTitle;
-    [SerializeField] GameObject chapterSelect;
+    [SerializeField] GameObject EssentialEdu;
+    [SerializeField] GameObject SelectiveEdu;
     [SerializeField] GameObject preferenceCanvas;
 
     [SerializeField] TMP_Dropdown dropdown_localization;
@@ -37,16 +38,30 @@ partial class MenuManager : MonoBehaviour
     public void MenuButton_AssentialEdu_OnMouseClick()
     {
         mainTitle.SetActive(false);
-        chapterSelect.SetActive(true);
+        EssentialEdu.SetActive(true);
+    }
+
+
+    // 선택 안전교육 버튼 클릭시
+    public void MenuButton_SeletiveEdu_OnMouseClick()
+    {
+        mainTitle.SetActive(false);
+        SelectiveEdu.SetActive(true);
     }
 
     // 뒤로 버튼
     public void MenuButton_Back_OnMouseClick()
     {
         mainTitle.SetActive(true);
-        chapterSelect.SetActive(false); // 챕터 선택
+        EssentialEdu.SetActive(false); // 챕터 선택
+        SelectiveEdu.SetActive(false);
         preferenceCanvas.SetActive(false);
         SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
+    }
+
+    public void MenuButton_Quit_OnMouseClick()
+    {
+        Application.Quit();
     }
 
     public void MenuButton_Chapter_OnMouseClick(int chap_num)
@@ -58,6 +73,7 @@ partial class MenuManager : MonoBehaviour
         // 버튼 클릭시 실행할 함수
         switch (chap_num)
         {
+            // 필수 안전교육
             case 0: // 튜토리얼
                 SceneManager.LoadScene("Tutorial");
                 break;
@@ -80,6 +96,15 @@ partial class MenuManager : MonoBehaviour
             case 7:
                 SceneManager.LoadScene("EduEmergencyEscape");
                 break;
+
+            // 선택 안전교육
+            case 8:
+                SceneManager.LoadScene("EduTerror");
+                break;
+            case 9:
+                SceneManager.LoadScene("EduPersonalProblem");
+                break;
+
             default:
                 break;
         }

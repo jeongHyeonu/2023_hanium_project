@@ -15,6 +15,8 @@ partial class EduGuideRulesManager : MonoBehaviour
     // 자막 다음버튼
     [SerializeField] GameObject nextButton;
 
+    // 승무원
+    [SerializeField] GameObject stewardess;
 
     private void Start()
     {
@@ -31,6 +33,7 @@ partial class EduGuideRulesManager : MonoBehaviour
         string scriptValue = localizeStringEvent.StringReference.GetLocalizedString(key);
         TextToSpeach.Instance.SpeechText(scriptValue);
         scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("");
+        stewardess.GetComponent<Animator>().SetBool("Talk", true);
 
         switch (scriptIndex)
         {
