@@ -85,15 +85,16 @@ partial class MenuManager : MonoBehaviour
             case 3:
                 SceneManager.LoadScene("EduGuideSafetyRules");
                 break;
-            //case 4:
-            //    break;
-            case 5:
+            case 4: // 산소마스크
+                SceneManager.LoadScene("EduOxygenMask");
+                break;
+            case 5: // 구명조끼
                 SceneManager.LoadScene("EduLifeJacket");
                 break;
-            case 6:
+            case 6: // 충격방지자세
                 SceneManager.LoadScene("EduAntiShockPosture");
                 break;
-            case 7:
+            case 7: // 비상탈출
                 SceneManager.LoadScene("EduEmergencyEscape");
                 break;
 
