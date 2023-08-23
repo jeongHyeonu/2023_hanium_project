@@ -117,6 +117,7 @@ public partial class SoundManager : MonoBehaviour {
     // 효과음 재생
     public void PlaySFX(SFX_list sfx)
     {
+        SFX_speaker.GetComponent<AudioSource>().clip = SFX_audioclips[sfx];
         SFX_speaker.GetComponent<AudioSource>().PlayOneShot(SFX_audioclips[sfx], SFX_volumeScale);
     }
 }
