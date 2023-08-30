@@ -2,19 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using DG.Tweening;
 
 public class Stewardess : MonoBehaviour
 {
-    [SerializeField] Rig headWeight;
-    [SerializeField] Rig leftWeight;
-    [SerializeField] Rig rightWeight;
-
-    bool isUXEnd;
-    float weightMax = .9f;
+    [SerializeField] public Rig headWeight;
+    [SerializeField] public Rig leftWeight;
+    [SerializeField] public Rig rightWeight;
 
     [SerializeField] GameObject HeadTarget;
     [SerializeField] GameObject LeftArmTarget;
     [SerializeField] GameObject RightArmTarget;
+
+    [SerializeField] public List<Sprite> textSprites;
+
+    public Vector3 originHeadPos = new Vector3(0f, 1.5f, .5f);
+    public Vector3 originRightPos = new Vector3(-2.60f, 6.3f, 17f);
+    public Vector3 originLeftPos = new Vector3(-2.13f, 6.3f, 17f);
+
+    public Vector3 originRightRot = new Vector3(0f, -180f, -90f);
+    public Vector3 originLeftRot = new Vector3(0f, 0f, 90f);
 
     public void TalkStop()
     {
@@ -26,68 +33,86 @@ public class Stewardess : MonoBehaviour
         this.GetComponent<Animator>().SetBool("Open", false);
     }
 
+    public void RandomTalkAnimation()
+    {
+        float lefthand = Random.Range(0f, .7f);
+        float righthand = Random.Range(0f, .7f);
+
+        leftWeight.weight = lefthand;
+        rightWeight.weight = righthand; 
+    }
+
+    // 마스크 착용 실습시 승무원 모션
     public void MaskEquipAnim()
     {
-        HeadTarget.transform.localPosition = new Vector3(0f,1.8f,0f);  // UnityEditor.TransformWorldPlacementJSON:{"position":{"x":-2.338182210922241,"y":7.312976360321045,"z":16.7008056640625},"rotation":{"x":0.0,"y":1.0,"z":0.0,"w":-0.00004032459401059896},"scale":{"x":1.0,"y":1.0,"z":1.0}}
-        RightArmTarget.transform.position = new Vector3(-2.59599996f, 7.01100016f, 16.1f) ; // Vector3(-2.59599996,7.01100016,16.9099998)
-        RightArmTarget.transform.rotation = Quaternion.Euler(new Vector3(354.399963f, 261.399994f, 110.000008f));
-        StartCoroutine(headWeight_UX(true));
-        StartCoroutine(rightArmWeight_UX(true));
-
-        leftWeight.weight = 1;
-        Invoke("leftWeight_zero", 5f);
-    }
-
-    IEnumerator headWeight_UX(bool isIncrease)
-    {
-        if (!isUXEnd)
+        Invoke("SetHeadWeight", 0f);
+        HeadTarget.transform.DOLocalMove(new Vector3(1f, 1.8f, 0f), 1f).OnComplete(() =>
         {
-            if (isIncrease) headWeight.weight += .01f;
-            else { headWeight.weight -= .01f; if (headWeight.weight == 0f) isUXEnd = true; }
+            HeadTarget.transform.DOLocalMove(new Vector3(-1f, 1.3f, 0.5f), 1f).SetDelay(2f).OnComplete(()=> {
+                HeadTarget.transform.DOLocalMove(originHeadPos, 1f).SetDelay(1.5f).OnComplete(() =>
+                {
+                    headWeight.weight = 0;
+                });
+            });
+        });
 
-            yield return new WaitForSeconds(.02f);
-
-            if (headWeight.weight <= weightMax) StartCoroutine(headWeight_UX(isIncrease));
-            else
-            {
-                yield return new WaitForSeconds(1f); StartCoroutine(headWeight_UX(!isIncrease));
-            }
-        }
-    }
-
-    IEnumerator leftArmWeight_UX(bool isIncrease)
-    {
-        if (!isUXEnd)
+        Invoke("SetRightWeight", .5f);
+        RightArmTarget.transform.DORotate(new Vector3(354.399963f, 261.399994f, 110.000008f),1f).SetDelay(.5f);
+        RightArmTarget.transform.DOMove(new Vector3(-2.8f, 6.8f, 16.8f), 1f).SetDelay(.5f).OnComplete(() =>
         {
-            if (isIncrease) leftWeight.weight += .01f;
-            else { leftWeight.weight -= .01f; if (leftWeight.weight == 0f) isUXEnd = true; }
+            RightArmTarget.transform.DOLocalRotate(originRightRot, 1f).SetDelay(1f);
+            RightArmTarget.transform.DOMove(originRightPos, 1f).SetDelay(1f).OnComplete(() => { rightWeight.weight = 0; });
+        });
 
-            yield return new WaitForSeconds(.02f);
-
-            if (leftWeight.weight <= weightMax) StartCoroutine(leftArmWeight_UX(isIncrease));
-            else
-            {
-                yield return new WaitForSeconds(1f); StartCoroutine(leftArmWeight_UX(!isIncrease));
-            }
-        }
-    }
-
-    IEnumerator rightArmWeight_UX(bool isIncrease)
-    {
-        if (!isUXEnd)
+        Invoke("SetLeftWeight", 3f);
+        LeftArmTarget.transform.DORotate(new Vector3(60f, 70f, 180f),.6f).SetDelay(3f);
+        LeftArmTarget.transform.DOMove(new Vector3(-1.95f, 6.6f, 16.8f),.6f).SetDelay(3f).OnComplete(()=>
         {
-            if (isIncrease) rightWeight.weight += .01f;
-            else { rightWeight.weight -= .01f; if(rightWeight.weight == 0f) isUXEnd= true; }    
-
-            yield return new WaitForSeconds(.02f);
-
-            if (rightWeight.weight <= weightMax) StartCoroutine(rightArmWeight_UX(isIncrease));
-            else
-            {
-                yield return new WaitForSeconds(1f); StartCoroutine(rightArmWeight_UX(!isIncrease));
-            }
-        }
+            LeftArmTarget.transform.DOLocalRotate(originLeftRot, .6f).SetDelay(2f);
+            LeftArmTarget.transform.DOMove(originLeftPos, .6f).SetDelay(2f).OnComplete(() => { leftWeight.weight = 0; });
+        });
     }
 
-    private void leftWeight_zero() { leftWeight.weight = 0f; }
+    // 벨트 착용 시 승무원 모션
+    public void BeltEquipAnim()
+    {
+        Invoke("SetHeadWeight", 0f);
+        HeadTarget.transform.DOLocalMove(new Vector3(1f, 1.3f, 0f), .5f).SetDelay(.5f).OnComplete(() =>
+        {
+            HeadTarget.transform.DOLocalMove(new Vector3(-1f, 1.3f, .5f), 1f).SetDelay(.5f).OnComplete(() => {
+                HeadTarget.transform.DOLocalMove(new Vector3(0f,1.3f,.5f), 1f).SetDelay(1f).OnComplete(() => {
+                    HeadTarget.transform.DOLocalMove(originHeadPos, 1f).SetDelay(3f).OnComplete(() =>
+                    {
+                        headWeight.weight = 0;
+                    });
+                });
+            });
+        });
+
+        Invoke("SetRightWeight", 1f);
+        RightArmTarget.transform.DORotate(new Vector3(-70f, -250f, 0f), 1f).SetDelay(1f);
+        RightArmTarget.transform.DOMove(new Vector3(-2.8f, 6.6f, 16.8f), 1f).SetDelay(1f).OnComplete(() =>
+        {
+            RightArmTarget.transform.DOMove(new Vector3(-2.5f, 6.6f, 16.8f), 1f).SetDelay(2f).OnComplete(() =>
+            {
+                RightArmTarget.transform.DOLocalRotate(originRightRot, 1f).SetDelay(1f);
+                RightArmTarget.transform.DOMove(originRightPos, 1f).SetDelay(1f).OnComplete(() => { rightWeight.weight = 0; });
+            });
+        });
+
+        Invoke("SetLeftWeight", 2f);
+        LeftArmTarget.transform.DORotate(new Vector3(60f, 70f, 180f), 1f).SetDelay(2f);
+        LeftArmTarget.transform.DOMove(new Vector3(-1.95f, 6.6f, 16.8f), 1f).SetDelay(2f).OnComplete(() =>
+        {
+            LeftArmTarget.transform.DOMove(new Vector3(-2.23f, 6.6f, 16.8f), 1f).SetDelay(1f).OnComplete(() =>
+            {
+                LeftArmTarget.transform.DOLocalRotate(originLeftRot, 1f).SetDelay(1f);
+                LeftArmTarget.transform.DOMove(originLeftPos, 1f).SetDelay(1f).OnComplete(() => { leftWeight.weight = 0; });
+            });
+        });
+    }
+
+    private void SetLeftWeight() { leftWeight.weight = 1f; }
+    private void SetRightWeight() { rightWeight.weight = 1f; }
+    private void SetHeadWeight() { headWeight.weight = 1f; }
 }

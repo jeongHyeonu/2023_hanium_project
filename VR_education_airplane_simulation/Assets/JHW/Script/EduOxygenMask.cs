@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 partial class EduOxygenMask : MonoBehaviour
@@ -33,16 +34,28 @@ partial class EduOxygenMask : MonoBehaviour
 
         localizeStringEvent.StringReference.SetReference("EduOxygenMask_StringTable", key);
         string scriptValue = localizeStringEvent.StringReference.GetLocalizedString(key);
-        TextToSpeach.Instance.SpeechText(scriptValue);
-        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("");
+        TextToSpeach.Instance.SpeechText(scriptValue.Replace('\n', ' '));
+
+        // 자막바 크기조정 및 스프라이트 변경
+        RectTransform rect = scriptText.transform.parent.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 50 + (scriptValue.Split("\n").Length - 1) * 20);
+        scriptText.transform.parent.GetComponent<Image>().sprite = stewardess.GetComponent<Stewardess>().textSprites[scriptValue.Split("\n").Length - 1];
+
+        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("").SetEase(Ease.Linear);
+        stewardess.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
         stewardess.GetComponent<Animator>().SetBool("Talk", true);
+        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(); // Talk 애니메이션 랜덤조정
 
         switch (scriptIndex)
         {
             case 2: // 실습 - 떨어진 산소마스크를 잡아 앞에 있는 승객에게 씌워주세요.
                 npc.SetActive(true);
                 mask.SetActive(true);
+
+                // 마스크 착용 모션
+                stewardess.GetComponent<Animator>().SetBool("Talk", false);
                 stewardess.GetComponent<Stewardess>().MaskEquipAnim();
+
                 mask.transform.DOLocalMoveY(0f, 4.5f);
                 break;
             case 7:
