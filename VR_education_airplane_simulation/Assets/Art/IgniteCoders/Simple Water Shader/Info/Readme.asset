@@ -12,23 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcf7219bab7fe46a1ad266029b2fee19, type: 3}
   m_Name: Readme
   m_EditorClassIdentifier: 
-  icon: {fileID: 2800000, guid: 7801804018a7dcf42abb827444e18660, type: 3}
-  title: Simple Water Shader
+  icon: {fileID: 2800000, guid: c2669591c82a8a843a3360fa3382b990, type: 3}
+  title: Unity Terrain - URP Demo Scene
   sections:
-  - heading: Simple Water Shader
-    text: 'This asset simulates a simple water using the Universal Render Pipeline (URP) and Shader Graph.'
+  - heading: 
+    text: 'This package includes a mix of example content to help you get the most out of the Unity Terrain system. You can use the textures, brushes, and models in this sample pack for your own projects.'
     linkText: 
     url: 
   - heading:
-    text: 'You can change colors, transparency, displacement... etc.'
+    text: 'This pack is designed to work with the Unity Universal Render Pipeline (check the Asset Store for version of the package targeting the High Definition Render Pipeline).'
     linkText: 
     url: 
   - heading:
-    text: 'There's a ReflectionCamera prefab with a script for mirroring the main camera, bus doesn't looks good in all situations.'
+    text: 'This scene includes a series of bookmarked locations with notes and tips.  Select any of the GameObjects under "Bookmarks" to see the details. The inspector for the bookmarks includes buttons which will focus the camera on points of interest and allow you to cycle through the bookmarks one at a time.'
     linkText: 
     url: 
-  - heading:
-    text: 'The Shader is well organized for better manipulation and configuration.'
+  - heading: 
+    text: 'Much of the content in this project was built using the '
+    linkText: Unity TerrainTools Package
+    url: https://docs.unity3d.com/Packages/com.unity.terrain-tools@latest/index.html
+  - heading: 
+    text: 'You can install TerrainTools using the Package Manager'
     linkText: 
     url: 
   loadedLayout: 1

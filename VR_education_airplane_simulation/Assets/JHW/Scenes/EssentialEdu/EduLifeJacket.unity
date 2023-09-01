@@ -2027,6 +2027,122 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &185941817
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 185941818}
+  - component: {fileID: 185941822}
+  - component: {fileID: 185941821}
+  - component: {fileID: 185941820}
+  - component: {fileID: 185941819}
+  m_Layer: 5
+  m_Name: grabUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &185941818
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185941817}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 1856599117}
+  m_Father: {fileID: 270010085}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 864, y: 486.25}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &185941819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185941817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b571981f596d7b4d8dc4d8110121100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 1.3
+  speed: 0.5
+--- !u!114 &185941820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185941817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &185941821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185941817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!223 &185941822
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185941817}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &200716213
 GameObject:
   m_ObjectHideFlags: 0
@@ -2503,14 +2619,13 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 769514482}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: JacketSelectEntered
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.XRBaseInteractor,
-            Unity.XR.Interaction.Toolkit
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2519,14 +2634,13 @@ MonoBehaviour:
   m_SelectExited:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 769514482}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: JacketSelectExited
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.XRBaseInteractor,
-            Unity.XR.Interaction.Toolkit
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2873,7 +2987,7 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2067991295}
+      - m_Target: {fileID: 769514482}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: leftHandleSelected
         m_Mode: 1
@@ -2888,7 +3002,7 @@ MonoBehaviour:
   m_SelectExited:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2067991295}
+      - m_Target: {fileID: 769514482}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: leftHandleExited
         m_Mode: 1
@@ -3393,12 +3507,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &320430269 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -867324196049760648, guid: 46a64e51825137e408e5021346bbc506,
-    type: 3}
-  m_PrefabInstance: {fileID: 486005316}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &326347368
 GameObject:
   m_ObjectHideFlags: 0
@@ -7872,7 +7980,7 @@ GameObject:
   - component: {fileID: 769514483}
   - component: {fileID: 769514482}
   m_Layer: 0
-  m_Name: lifejacket
+  m_Name: lifejacketManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7897,8 +8005,8 @@ MonoBehaviour:
   BeltGrabUX: {fileID: 2065539497}
   BeltDropUX: {fileID: 1334576213}
   lifeJacketDropPos: {fileID: 8456759669238188159}
-  BeltStartPos: {fileID: 320430269}
-  BeltEndPos: {fileID: 1765391267}
+  BeltStartPos: {fileID: 5822188033458749339}
+  BeltEndPos: {fileID: 2931193136263283337}
   CharacterCenter: {fileID: 202511332}
   txt: {fileID: 788866403}
   stewardess: {fileID: 90854470}
@@ -7912,12 +8020,14 @@ MonoBehaviour:
   scriptText: {fileID: 788866403}
   localizeStringEvent: {fileID: 788866402}
   nextButton: {fileID: 1753837822}
-  jacket_model: {fileID: 563472775}
+  scriptIndex: 0
+  jacket_model: {fileID: 1127007498}
   jacket_grabUI: {fileID: 563472775}
   jacket_triggerUI: {fileID: 1439708517}
   jacket_originPosObj: {fileID: 59155659}
   jacket_lifeJacketObj: {fileID: 270010080}
   jacketBag: {fileID: 278324748}
+  jacketGrabUI: {fileID: 185941817}
 --- !u!4 &769514483
 Transform:
   m_ObjectHideFlags: 0
@@ -8383,7 +8493,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 846291981}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.45, y: 5.4, z: 20.782}
+  m_LocalPosition: {x: -2.45, y: 5.4, z: 20.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9844,7 +9954,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 1929589703}
+  m_audioClip: {fileID: 2000468000}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -11485,7 +11595,7 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 769514482}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: JacketBagSelected
         m_Mode: 1
@@ -11500,7 +11610,7 @@ MonoBehaviour:
   m_SelectExited:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 769514482}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: JacketBagExited
         m_Mode: 1
@@ -11515,7 +11625,7 @@ MonoBehaviour:
   m_Activated:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 769514482}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: JacketBagTriggered
         m_Mode: 1
@@ -16748,7 +16858,7 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2067991295}
+      - m_Target: {fileID: 769514482}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: rightHandleSelected
         m_Mode: 1
@@ -16763,7 +16873,7 @@ MonoBehaviour:
   m_SelectExited:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2067991295}
+      - m_Target: {fileID: 769514482}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: rightHandleExited
         m_Mode: 1
@@ -18447,12 +18557,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
---- !u!1 &1765391267 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1072549032852616780, guid: 46a64e51825137e408e5021346bbc506,
-    type: 3}
-  m_PrefabInstance: {fileID: 486005316}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1788866397
 GameObject:
   m_ObjectHideFlags: 0
@@ -19243,6 +19347,82 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &1856599116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1856599117}
+  - component: {fileID: 1856599119}
+  - component: {fileID: 1856599118}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1856599117
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856599116}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 185941818}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -1.88, y: 15.32}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1856599118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856599116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 348e80c3014094249b08b678feecb6bb, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1856599119
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856599116}
+  m_CullTransparentMesh: 1
 --- !u!1 &1859340044
 GameObject:
   m_ObjectHideFlags: 0
@@ -19946,34 +20126,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1160000a7c3c84a40bb7525a0da51f59, type: 3}
---- !u!83 &1929589703
-AudioClip:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_LoadType: 0
-  m_Channels: 0
-  m_Frequency: 0
-  m_BitsPerSample: 0
-  m_Length: 0
-  m_IsTrackerFormat: 0
-  m_Ambisonic: 0
-  m_SubsoundIndex: 0
-  m_PreloadAudioData: 1
-  m_LoadInBackground: 0
-  m_Legacy3D: 0
-  m_Resource:
-    m_Source: 
-    m_Offset: 0
-    m_Size: 0
-  m_CompressionFormat: 0
-  m_EditorResource:
-    m_Source: 
-    m_Offset: 0
-    m_Size: 0
-  m_EditorCompressionFormat: 0
 --- !u!1 &1932868463
 GameObject:
   m_ObjectHideFlags: 0
@@ -21238,6 +21390,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18ddb545287c546e19cc77dc9fbb2189, type: 3}
+--- !u!83 &2000468000
+AudioClip:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_LoadType: 0
+  m_Channels: 0
+  m_Frequency: 0
+  m_BitsPerSample: 0
+  m_Length: 0
+  m_IsTrackerFormat: 0
+  m_Ambisonic: 0
+  m_SubsoundIndex: 0
+  m_PreloadAudioData: 1
+  m_LoadInBackground: 0
+  m_Legacy3D: 0
+  m_Resource:
+    m_Source: 
+    m_Offset: 0
+    m_Size: 0
+  m_CompressionFormat: 0
+  m_EditorResource:
+    m_Source: 
+    m_Offset: 0
+    m_Size: 0
+  m_EditorCompressionFormat: 0
 --- !u!1 &2001046535
 GameObject:
   m_ObjectHideFlags: 0
@@ -21965,8 +22145,8 @@ MonoBehaviour:
   BeltGrabUX: {fileID: 2065539497}
   BeltDropUX: {fileID: 1334576213}
   lifeJacketDropPos: {fileID: 919132148659930866}
-  BeltStartPos: {fileID: 8356047840309622235}
-  BeltEndPos: {fileID: 1072549032290094575}
+  BeltStartPos: {fileID: 5822188033458749339}
+  BeltEndPos: {fileID: 2931193136263283337}
   CharacterCenter: {fileID: 202511332}
   txt: {fileID: 0}
   stewardess: {fileID: 90854470}
@@ -21977,15 +22157,17 @@ MonoBehaviour:
   leftHandle: {fileID: 286735555}
   rightHandle: {fileID: 1649130947}
   jacketTube: {fileID: 7505537920917948753}
-  scriptText: {fileID: 0}
-  localizeStringEvent: {fileID: 0}
-  nextButton: {fileID: 0}
+  scriptText: {fileID: 788866403}
+  localizeStringEvent: {fileID: 788866402}
+  nextButton: {fileID: 1753837822}
+  scriptIndex: 0
   jacket_model: {fileID: 0}
   jacket_grabUI: {fileID: 0}
   jacket_triggerUI: {fileID: 0}
   jacket_originPosObj: {fileID: 0}
   jacket_lifeJacketObj: {fileID: 0}
   jacketBag: {fileID: 0}
+  jacketGrabUI: {fileID: 0}
 --- !u!1 &2072997868
 GameObject:
   m_ObjectHideFlags: 0
@@ -23208,7 +23390,7 @@ GameObject:
   - component: {fileID: 2067991293}
   - component: {fileID: 2067991295}
   m_Layer: 0
-  m_Name: life_jacket_equiped (1)
+  m_Name: equipedJacket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23535,6 +23717,11 @@ PrefabInstance:
     - target: {fileID: 3096134005794233385, guid: 841e92924fc4439498e0aed78ee497f7,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150587487271546452, guid: 841e92924fc4439498e0aed78ee497f7,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -26517,11 +26704,10 @@ MonoBehaviour:
       - m_Target: {fileID: 2067991295}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: JacketBeltSelectEntered
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.XRBaseInteractor,
-            Unity.XR.Interaction.Toolkit
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -26533,11 +26719,10 @@ MonoBehaviour:
       - m_Target: {fileID: 2067991295}
         m_TargetAssemblyTypeName: lifeJacket, Assembly-CSharp
         m_MethodName: JacketBeltSelectExited
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.XRBaseInteractor,
-            Unity.XR.Interaction.Toolkit
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

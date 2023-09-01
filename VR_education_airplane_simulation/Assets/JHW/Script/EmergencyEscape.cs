@@ -48,6 +48,15 @@ public class EmergencyEscape : MonoBehaviour
     // 승무원
     [SerializeField] GameObject stewardess;
 
+    // 중간중간에 나올 이미지들
+    [SerializeField] GameObject image1;
+    [SerializeField] GameObject image2;
+    [SerializeField] GameObject image3;
+    [SerializeField] GameObject image4;
+    [SerializeField] GameObject image5;
+    [SerializeField] GameObject image6;
+    [SerializeField] GameObject image7;
+
     int scriptIndex = 0;
     Vector3 tempPos;
 
@@ -81,6 +90,28 @@ public class EmergencyEscape : MonoBehaviour
 
         switch (scriptIndex)
         {
+            case 2:
+                image1.SetActive(true);
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
+            case 3:
+                image1.SetActive(false);
+                image2.SetActive(true);
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
+            case 4:
+                image2.SetActive(false);
+                image3.SetActive(true);
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
+            case 6:
+                image3.SetActive(false);
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
             case 9: // 실습 - 벨트 착용 해제
                 belt.SetActive(true);
                 break;
@@ -126,16 +157,23 @@ public class EmergencyEscape : MonoBehaviour
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f);
                 nextButton.SetActive(true);
                 break;
+            case 15:
+                image5.SetActive(true);
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
             case 16: // 실습 - 다음 그림과 같이 다리와 팔을 앞으로 펴 땅과 수평이 되도록 하고 슬라이드를 타고 내려가주시기 바랍니다.
+                image5.SetActive(false);
+                image6.SetActive(true);
                 leftHandPos.SetActive(true);
                 rightHandPos.SetActive(true);
                 StartCoroutine(CheckHandPos());
                 break;
             case 17: // 슬라이드를 타고 내려갔다면 다음 승객이 탈출을 할 수 있도록 슬라이드에서 내려와 멀리 피해주시기 바랍니다.
-
+                image6.SetActive(false);
                 tempPos = playerController1.transform.position; // 플레이어 원래 위치
                 // 슬라이드 타고 내려가기, 이동완료시 다음자막버튼 활성화
-                playerController1.transform.DOMove(slide_endPos.transform.position, 6f).SetDelay(3f).OnComplete(() => { nextButton.SetActive(true); }).SetEase(Ease.Linear);
+                playerController1.transform.DOMove(slide_endPos.transform.position, 6f).SetDelay(2f).OnComplete(() => { nextButton.SetActive(true); }).SetEase(Ease.InOutQuad);
 
                 break;
             case 19: // 물 위에 착륙하게 된다면 승무원은 다음과 같이 안내합니다. ”구명복 부풀려!” “안쪽으로!” “기어서 안쪽으로!” “앉아, 자세 낮춰!”
@@ -152,16 +190,26 @@ public class EmergencyEscape : MonoBehaviour
                 boat.SetActive(true);// 보트 활성화
                 slide.SetActive(false);// 슬라이드 비활성화
                 // 승무원 위치
-                stewardess.transform.position = new Vector3(boat_destination.transform.position.x-2f, boat_destination.transform.position.y-1f, boat_destination.transform.position.z);
+                stewardess.transform.position = new Vector3(boat_destination.transform.position.x-2f, boat_destination.transform.position.y-0.75f, boat_destination.transform.position.z+.19f);
                 stewardess.transform.localRotation = Quaternion.Euler(new Vector3(0, 90f, 0));
 
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
+            case 20:
+                image7.SetActive(true);
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
+            case 21:
+                image7.SetActive(false);
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f);
                 nextButton.SetActive(true);
                 break;
             case 22: // 실습 - 상단의 빨간 영역에 머리가 닿지 않도록 기어서 슬라이드의 안쪽으로 이동해 주십시오.
 
                 redBox.SetActive(true);
-                playerController1.transform.DOMove(boat_destination.transform.position, 7f).SetDelay(3f).OnComplete( () => { nextButton.SetActive(true); });
+                playerController1.transform.DOMove(boat_destination.transform.position, 7f).SetDelay(5f).OnComplete( () => { nextButton.SetActive(true); });
                 break;
 
             case 23:
@@ -243,6 +291,8 @@ public class EmergencyEscape : MonoBehaviour
     // 벨트 grab -> 벨트 해제
     public void BeltSelectEntered()
     {
+        beltEnd2.GetComponent<XRGrabInteractable>().enabled = false;
+
         // 벨트 UX
         beltEnd1.transform.DOLocalMove(new Vector3(0, beltEnd1.transform.localPosition.y, 0), .5f);
         beltEnd1.transform.DOLocalRotate(Vector3.zero, .5f);
@@ -263,23 +313,23 @@ public class EmergencyEscape : MonoBehaviour
         // 승무원 이동
         stewardess.transform.DOLocalRotate(new Vector3(0,270f,0),0f);
         _obj.SetActive(false);
-        stewardess.transform.DOMove(new Vector3(_obj.transform.position.x,stewardess.transform.position.y,_obj.transform.position.z), 0f).OnComplete(() =>
+        stewardess.transform.DOMove(new Vector3(_obj.transform.position.x-.3f,stewardess.transform.position.y,_obj.transform.position.z), 0f).OnComplete(() =>
         {
             // 문 애니메이션
             Vector3 DoorLocalPos = Door.transform.localPosition;
             stewardess.GetComponent<Animator>().SetBool("Talk", false);
             stewardess.GetComponent<Animator>().SetBool("Open", true);
-            Door.transform.DOLocalMove(new Vector3(DoorLocalPos.x - 0.3f, DoorLocalPos.y, DoorLocalPos.z), 0.5f).OnComplete(() =>
+            Door.transform.DOLocalMove(new Vector3(DoorLocalPos.x - 0.3f, DoorLocalPos.y, DoorLocalPos.z), 0.5f).SetDelay(2f).OnComplete(() =>
             {
                 Door.transform.DOLocalRotate(new Vector3(0f,0f,-180f), 5f).OnComplete(() =>
                 {
                     Destroy(_obj);
-                    playerController1.transform.position = new Vector3(_obj.transform.position.x, _obj.transform.position.y-.8f, _obj.transform.position.z);
+                    playerController1.transform.position = new Vector3(_obj.transform.position.x, _obj.transform.position.y, _obj.transform.position.z);
                     pathUX.SetActive(false);
                     playerController1.transform.localRotation = Quaternion.Euler(new Vector3(0, -90f, 0)); // 카메라가 슬라이더를 향하도록
 
                     // 스튜디어스 위치
-                    stewardess.transform.position = new Vector3(slide_endPos.transform.position.x-2f, slide_endPos.transform.position.y-1.2f, slide_endPos.transform.position.z); 
+                    stewardess.transform.position = new Vector3(slide_endPos.transform.position.x-2f, slide_endPos.transform.position.y-1.35f, slide_endPos.transform.position.z); 
                     stewardess.transform.localRotation = Quaternion.Euler(new Vector3(0, 90f, 0));
 
                     scriptIndex++;

@@ -38,21 +38,23 @@ partial class lifeJacket : MonoBehaviour
     public void JacketSelectEntered()
     {
         lifeJacketDropPos.SetActive(true);
+        jacketGrabUI.SetActive(false);
     }
     public void JacketSelectExited()
     {
         Debug.Log(originLifeJacketPos); // 원래 구명조끼 위치
-        Debug.Log(transform.position); // 오른손 놓았을 때 좌표
+        Debug.Log(jacket_lifeJacketObj.transform.position); // 오른손 놓았을 때 좌표
 
-        Debug.Log("거리 = " + Vector3.Distance(lifeJacketDropPos.transform.position, transform.position));
-        if (Vector3.Distance(lifeJacketDropPos.transform.position, transform.position) >= 0.17f) // 놓아야 할 곳에 안 놓았다면 원래 위치로
+        Debug.Log("거리 = " + Vector3.Distance(lifeJacketDropPos.transform.position, jacket_lifeJacketObj.transform.position));
+        if (Vector3.Distance(lifeJacketDropPos.transform.position, jacket_lifeJacketObj.transform.position) >= 0.17f) // 놓아야 할 곳에 안 놓았다면 원래 위치로
         {
-            this.transform.position = originLifeJacketPos;
-            this.transform.rotation = Quaternion.Euler(0, 90, 0);
+            jacket_lifeJacketObj.transform.position = originLifeJacketPos;
+            jacket_lifeJacketObj.transform.rotation = Quaternion.Euler(0, 90, 0);
+            jacketGrabUI.SetActive(true);
             return;
         }
         lifeJacketDropPos.SetActive(false);
-        this.gameObject.SetActive(false);
+        jacket_lifeJacketObj.gameObject.SetActive(false);
         equipedJacket.SetActive(true);
         // 자막 변경
         scriptIndex++;
@@ -65,28 +67,34 @@ partial class lifeJacket : MonoBehaviour
         BeltGrabUX.SetActive(false);
         BeltDropUX.SetActive(true);
 
-
+        for (int i = 0; i < CharacterCenter.transform.childCount-1; i++)
+        {
+            //beltPos[i].transform.position = new Vector3(beltPos[i].transform.position.x, BeltEndPos.transform.position.y, beltPos[i].transform.position.z);
+            beltPos[i].transform.DOMove(CharacterCenter.transform.GetChild(i).position, .5f);
+        }
         // 시작점 끝점 위치 파악해서 벨트 재조정
         //Vector3 startPos = beltPos[0].transform.position;
         //Vector3 destPos = beltPos[beltPos.Count-1].transform.position;
         //Vector3 diff = startPos - destPos;
     }
 
-    public void JacketBeltSelectExited(XRBaseInteractor interactor)
+    public void JacketBeltSelectExited()
     {
         Debug.Log("거리 = " + Vector3.Distance(BeltEndPos.transform.position, BeltStartPos.transform.position));
         if (Vector3.Distance(BeltEndPos.transform.position, BeltStartPos.transform.position) >= 0.15f) // 놓아야 할 곳에 안 놓았다면 원래 위치로
         {
             BeltStartPos.transform.position = originBeltStartPos;
-            BeltStartPos.transform.rotation = Quaternion.Euler(0, 0, 0);
+            BeltStartPos.transform.rotation = Quaternion.Euler(180, 0, 90);
+            BeltGrabUX.SetActive(true); 
+            BeltDropUX.SetActive(false);
             return;
         }
         BeltGrabUX.SetActive(true);
         BeltDropUX.SetActive(false);
 
         // 상호작용 불가능하게 변경
-        BeltStartPos.transform.parent.GetComponent<XRGrabInteractable>().enabled = false;
-        BeltStartPos.transform.parent.GetChild(1).gameObject.SetActive(false);
+        BeltStartPos.transform.GetComponent<XRGrabInteractable>().enabled = false;
+        BeltStartPos.transform.GetChild(1).gameObject.SetActive(false);
 
         for (int i = 0; i < CharacterCenter.transform.childCount; i++)
         {
@@ -96,7 +104,7 @@ partial class lifeJacket : MonoBehaviour
         beltPos[CharacterCenter.transform.childCount - 1].transform.rotation = Quaternion.Euler(180, 0, 90);
 
         // 다음 자막으로
-        scriptIndex++;
+        scriptIndex=5;
         StartCoroutine(NextScript());
     }
 }
@@ -116,18 +124,25 @@ partial class lifeJacket
 
     bool isRightSelected;
     bool isLeftSelected;
+    bool isAlreadyInflated = false;
 
     public void leftHandleSelected()
     {
         isLeftSelected = true;
-        if (isRightSelected) InflateLifeJacket();
+        if (isRightSelected && !isAlreadyInflated)
+        {
+            isAlreadyInflated = true; InflateLifeJacket();
+        }
         leftHandle.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public void rightHandleSelected()
     {
         isRightSelected = true;
-        if (isLeftSelected) InflateLifeJacket();
+        if (isLeftSelected && !isAlreadyInflated)
+        {
+            isAlreadyInflated = true; InflateLifeJacket();
+        }
         rightHandle.transform.GetChild(0).gameObject.SetActive(false);
     }
 
@@ -150,6 +165,7 @@ partial class lifeJacket
         jacketTube.GetComponent<Transform>().DOScale(130f, .5f);
         leftHandle.SetActive(false);
         rightHandle.SetActive(false);
+        
 
         scriptIndex++;
         StartCoroutine(NextScript()); // 다음 스크립트로
@@ -166,9 +182,9 @@ public partial class lifeJacket {
     [SerializeField] GameObject nextButton;
 
     // 다음 자막 읽어오기
-    int scriptIndex = 0;
+    public int scriptIndex = 0;
 
-    IEnumerator NextScript()
+    public IEnumerator NextScript()
     {
         string key = "lifeJacket_script" + scriptIndex;
 
@@ -191,24 +207,30 @@ public partial class lifeJacket {
             case 2:
                 jacketBag.SetActive(true);
                 break;
+            case 3: // 구명조끼 착용 - 다음자막 버튼 뜨면 안됨
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                break;
+            case 4: // 구명조끼 벨트매기 - 다음자막 버튼 뜨면 안됨
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                break;
             case 5: // 비상구 이동
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
-                // 플레이어, npc 이동
+                // 플레이어, npc, 승무원 이동
                 npcObj.transform.GetComponent<Transform>().position = npcMovePos.position;
                 xrOriginObj.transform.GetComponent<Transform>().position = xrOriginMovePos.position;
-                scriptIndex++;
-                StartCoroutine(NextScript());
+                stewardess.transform.position = new Vector3(-1.476f, 5.451f, 21.03f);
+                GameObject.Find("lifejacketManager").GetComponent<lifeJacket>().scriptIndex = 6; // 하드코딩 죄송합니다... 원래는 lifejacket 컴포넌트가 오브젝트 하나에 적용해야 되는데 실수로 다른데에도 적용해서 오브젝트가 두개라서..  GameObject.Find 썼습니다 죄송합니다!!
+                StartCoroutine(GameObject.Find("lifejacketManager").GetComponent<lifeJacket>().NextScript());
                 break;
-            case 6: // 구명복 부풀리기
+            case 7: // 구명복 부풀리기
                 leftHandle.SetActive(true);
                 rightHandle.SetActive(true);
                 break;
-            case 7: // 부풀리기 완료
-                InflateLifeJacket();
+            case 8: // 부풀리기 완료
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f);
                 nextButton.SetActive(true);
                 break;
-            case 11:
+            case 12:
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
                 SceneManager.LoadScene("MainTitle");
                 break;
@@ -232,12 +254,12 @@ public partial class lifeJacket {
 
     private void Start()
     {
-        originLifeJacketPos = this.transform.position;
+        originLifeJacketPos = this.transform.GetChild(0).position;
         originBeltStartPos = BeltStartPos.transform.position;
         originBeltEndPos = BeltEndPos.transform.position;
 
-        NextButtonOnClick();
-        //jacket_lifeJacketObj.SetActive(false);
+        // 구명조끼는 착용중인 구명조끼, 승객에게 입힐 구명조끼 두 개가 있는데, 착용중인 구명조끼인 경우는 다음 자막 실행 X
+        if(this.name != "equipedJacket")NextButtonOnClick();
     }
 }
 
@@ -249,6 +271,7 @@ public partial class lifeJacket
     [SerializeField] GameObject jacket_originPosObj;
     [SerializeField] GameObject jacket_lifeJacketObj;
     [SerializeField] GameObject jacketBag;
+    [SerializeField] GameObject jacketGrabUI;
 
     public void JacketBagSelected()
     {
