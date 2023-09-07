@@ -175,6 +175,8 @@ partial class MenuManager : MonoBehaviour
             var locale = LocalizationSettings.AvailableLocales.Locales[i];
             if (LocalizationSettings.SelectedLocale == locale)
                 selected = i;
+
+            //if(locale.name=="Korean" || locale.name == "English") 
             options.Add(new TMP_Dropdown.OptionData(locale.name));
         }
         dropdown_localization.options = options;
@@ -194,4 +196,6 @@ partial class MenuManager : MonoBehaviour
         string key = "Menu_start_dis_" + num;
         discription_edu.GetComponent<LocalizeStringEvent>().StringReference.SetReference("Menu_StringTable",key);
     }
+
+    // 교육 클리어했는지 여부 검사
 }

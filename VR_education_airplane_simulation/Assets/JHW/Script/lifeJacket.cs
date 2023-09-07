@@ -175,6 +175,9 @@ partial class lifeJacket
 }
 
 public partial class lifeJacket {
+    // 마지막 자막 스크립트 인덱스 번호
+    static private int MAX_SCRIPT_INDEX = 12;
+
     // 자막
     [SerializeField] TextMeshProUGUI scriptText;
     [SerializeField] LocalizeStringEvent localizeStringEvent;
@@ -198,9 +201,7 @@ public partial class lifeJacket {
         scriptText.transform.parent.GetComponent<Image>().sprite = stewardess.GetComponent<Stewardess>().textSprites[scriptValue.Split("\n").Length - 1];
 
         scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("").SetEase(Ease.Linear);
-        stewardess.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
-        stewardess.GetComponent<Animator>().SetBool("Talk", true);
-        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(); // Talk 애니메이션 랜덤조정
+        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(scriptIndex==MAX_SCRIPT_INDEX); // Talk 애니메이션 랜덤조정
 
         switch (scriptIndex)
         {
