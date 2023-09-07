@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -31,6 +32,14 @@ partial class BackrestAngleManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cube.GetComponent<XRGrabInteractable>().enabled = false; /// ... 스타트 문제가 아니네..
+
+        // 상호작용 금지
+        windowHandle_model.GetComponent<XRGrabInteractable>().enabled = false;
+        backRestButton.transform.GetChild(2).GetComponent<XRGrabInteractable>().enabled = false;
+        table.GetComponent<XRGrabInteractable>().enabled = false;
+        tablePin.GetComponent<XRGrabInteractable>().enabled = false;
+
         NextButtonOnClick();
     }
 
@@ -42,24 +51,35 @@ partial class BackrestAngleManager : MonoBehaviour
 
         localizeStringEvent.StringReference.SetReference("EduBackrestAngle_String_Table", key);
         string scriptValue = localizeStringEvent.StringReference.GetLocalizedString(key);
-        TextToSpeach.Instance.SpeechText(scriptValue);
-        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("");
+        TextToSpeach.Instance.SpeechText(scriptValue.Replace('\n', ' '));
+        //TextToSpeach.Instance.SpeechText(scriptValue);
+        //scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("");
+        //stewardess.GetComponent<Animator>().SetBool("Talk", true);
+
+        // 자막바 크기조정 및 스프라이트 변경
+        RectTransform rect = scriptText.transform.parent.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 50 + (scriptValue.Split("\n").Length - 1) * 20);
+        scriptText.transform.parent.GetComponent<Image>().sprite = stewardess.GetComponent<Stewardess>().textSprites[scriptValue.Split("\n").Length - 1];
+
+        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("").SetEase(Ease.Linear);
+        stewardess.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
         stewardess.GetComponent<Animator>().SetBool("Talk", true);
+        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(); // Talk 애니메이션 랜덤조정
 
         switch (scriptIndex)
         {
             case 8: // 창문 올리면, 다음 버튼 비활성화
-                windowAct = true; // 창문 상호작용 활성화
+                windowHandle_model.GetComponent<XRGrabInteractable>().enabled = true; // 창문 상호작용 o
+                windowAct = true;
                 windowHandle_model.transform.GetChild(1).gameObject.SetActive(true); // ui on
                 break;
             case 9: // 버튼 누르면, 다음 버튼 비활성화
+                backRestButton.transform.GetChild(2).GetComponent<XRGrabInteractable>().enabled = true; ; // 등받이 상호작용 o
                 backrestAct = true;
                 backRestButton.transform.GetChild(0).gameObject.SetActive(true); // ui on
                 break;
             case 10: // 책상 원상복구하면, 다음 버튼 비활성화
-                // 문제점: 그 전에 책상 건들였다면.. 각도가 더 휘어진다 허허..
-                //table.transform.Rotate(minTableRot, 0, 0); // 책상 내리기
-                //tablePin.transform.Rotate(0, 0, maxTablePinRot);// 책상핀 돌리기
+                table.GetComponent<XRGrabInteractable>().enabled = true; // 책상 상호작용 o
 
                 table.transform.rotation = Quaternion.Euler(70, 180, 0);
                 tablePin.transform.rotation = Quaternion.Euler(0, 0, 90);
@@ -95,8 +115,21 @@ partial class BackrestAngleManager : MonoBehaviour
     }
 
 
+    // Test
+    [SerializeField] GameObject cube;
+
     void Update()
     {
+        // Test 아니 뭔데 왜 돼..? 뭐가 문제지 그럼.. 노가다 좀 해야겠네... .. ... ㅠ.. ㅠ.... ㅠㅠㅠ... ㅠㅠㅠㅠㅠ.......
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            cube.GetComponent<XRGrabInteractable>().enabled = true;
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            cube.GetComponent<XRGrabInteractable>().enabled = false;
+        }
+
         // 창문 핸들 위치 제한
         if (windowHandle_model.transform.position.y >= maxYPosition)
         {
@@ -104,7 +137,6 @@ partial class BackrestAngleManager : MonoBehaviour
             newPosition.y = maxYPosition;
             windowHandle_model.transform.position = newPosition;
         }
-
         if (windowHandle_model.transform.position.y <= minYPosition)
         {
             Vector3 newPosition = windowHandle_model.transform.position;
@@ -171,8 +203,8 @@ partial class BackrestAngleManager : MonoBehaviour
             table.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
 
-        //Debug.Log("table: "+ table.transform.eulerAngles);
-        //Debug.Log("table pin: " + tablePin.transform.eulerAngles);
+        Debug.Log("table: "+ table.transform.eulerAngles);
+        Debug.Log("table pin: " + tablePin.transform.eulerAngles);
 
 
         // 책상핀 각도 제한
@@ -187,18 +219,18 @@ partial class BackrestAngleManager : MonoBehaviour
             tablePin.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
 
-        // 책상 자막에서 다음 자막으로 넘어가기
-        if (!isTable && isTableGrabbed && isTablePinGrabbed)
-        {
-            tableAct = false;
-            tablePinAct = false;
-            isTable = true;
-            table.GetComponent<XRGrabInteractable>().enabled = false; // 책상 상호작용 불가능
-            tablePin.GetComponent<XRGrabInteractable>().enabled = false; // 책상핀 상호작용 불가능
+        //// 책상 자막에서 다음 자막으로 넘어가기
+        //if (!isTable && isTableGrabbed && isTablePinGrabbed)
+        //{
+        //    tableAct = false;
+        //    tablePinAct = false;
+        //    isTable = true;
+        //    table.GetComponent<XRGrabInteractable>().enabled = false; // 책상 상호작용 불가능
+        //    tablePin.GetComponent<XRGrabInteractable>().enabled = false; // 책상핀 상호작용 불가능
 
-            // 다음 스크립트로
-            NextButtonOnClick();
-        }
+        //    // 다음 스크립트로
+        //    NextButtonOnClick();
+        //}
     }
 }
 
@@ -240,7 +272,6 @@ partial class BackrestAngleManager : MonoBehaviour
     [SerializeField] GameObject baggage; // 짐 오브젝트
     [SerializeField] GameObject dropBaggage; // 바닥에 내려놓을 짐 놓을 때 오브젝트
     [SerializeField] GameObject originBaggagePos; // 바닥에 내려놓을 짐 원래 위치
-
 
     // 창문 컨트롤
     public void WindowSelectEntered()
@@ -288,26 +319,21 @@ partial class BackrestAngleManager : MonoBehaviour
     }
 
     // 책상 컨트롤
-    // 1. 책상 펼치기
-    // pin 0 -> 90, 이 사이에 table 움직일 수 없게
-    // table 0 -> 90, 이 사이에 pin 움직일 수 없게
-    // 2. 책상 접기
-    // table 90 -> table 0 , 이 사이에 pin은 움직일 수 없게
-    // pin 90 -> 0, 이 사이에 table은 움직일 수 없게
-    // 모두 완료되면 다음 단계로
     public void TableSelectEntered()
     {
-        if (!isTableGrabbed && tableAct)
-        {
+        //if (!isTableGrabbed && tableAct)
+        //{
             table.transform.GetChild(1).gameObject.SetActive(false); // grab ui off
             tableGoal.SetActive(true); // goal ui on
-        }
+        //}
     }
     public void TableSelectExited()
     {
-        if(!isTableGrabbed && tableAct)
-        {
-            if(table.transform.eulerAngles.x >= 355 || table.transform.eulerAngles.x <= 5)
+        // <<오잉?>> 이게 exited 제대로 된건가? 왜 if문 실행이 안되는거지 조건은 맞는디 허... 거 참 이상하네..
+        // ㅁ읭 0도일때 안되는건가..? 아니.. 아 .어.. 하,, 0이.. 없나.. 근데 360라 했는데......
+        //if(!isTableGrabbed && tableAct)
+        //{
+        if (table.transform.eulerAngles.x == 0 || table.transform.eulerAngles.x <= 3 ||table.transform.eulerAngles.x >= 357)
             {
                 Debug.Log("Table true");
 
@@ -320,44 +346,50 @@ partial class BackrestAngleManager : MonoBehaviour
 
                 //Tabel.GetComponent<XRGrabInteractable>().enabled = false; // 책상 상호작용 불가능
                 //TabelPin.GetComponent<XRGrabInteractable>().enabled = true; // 책상핀 상호작용 가능
+                
                 //tableAct = false;
                 //tablePinAct = true;
                 isTableGrabbed = true;
 
                 tableGoal.SetActive(false); // goal ui off
                 tablePin.transform.GetChild(1).gameObject.SetActive(true); // grab ui on
+
+                table.GetComponent<XRGrabInteractable>().enabled = false; // 책상 상호작용 x
+                tablePin.GetComponent<XRGrabInteractable>().enabled = true; // 책상핀 상호작용 o
             }
-        }
+        //}
     }
+
+    // 책상핀 컨트롤
     public void TablePinSelectEntered()
     {
-        if (!isTablePinGrabbed && tablePinAct)
-        {
+        //if (!isTablePinGrabbed && tablePinAct)
+        //{
             tablePin.transform.GetChild(1).gameObject.SetActive(false); // grab ui off
             tablePinGoal.SetActive(true); // goal ui on
-        }
+        //}
      }
-        public void TablePinSelectExited()
+    public void TablePinSelectExited()
     {
-        if(!isTablePinGrabbed && tablePinAct)
-        {
+        //if(!isTablePinGrabbed && tablePinAct)
+        //{
             //if(tablePin.transform.rotation.z <= goalTablePinRot)
-            if (tablePin.transform.eulerAngles.z <= 5)
+            if (tablePin.transform.eulerAngles.z == 0 || tablePin.transform.eulerAngles.z <= 5 || tablePin.transform.eulerAngles.z >= 360)
             {
                 Debug.Log("Pin true");
                 
-                //TabelPin.GetComponent<XRGrabInteractable>().enabled = false; // 책상핀 상호작용 불가능
+                tablePin.GetComponent<XRGrabInteractable>().enabled = false; // 책상핀 상호작용 x
                 //tablePinAct = false;
                 isTablePinGrabbed = true;
                 tablePinGoal.SetActive(false); // goal ui off
 
-                //NextButtonOnClick(); // 다음 스크립트로
+                NextButtonOnClick(); // 다음 스크립트로
             }
-        }
+        //}
     }
 
 
-    // 가방 컨트롤 ㅇ..ㅇ.. 왜.. 어딘가에 이미 구현했던 것 같지... 했네.. 흠,, 복붙해야겠다:>
+    // 가방 컨트롤
     public void baggageSelectEntered()
     {
         baggage.transform.GetChild(0).gameObject.SetActive(false); // Grab UX off
