@@ -64,6 +64,7 @@ partial class EduOxygenMask : MonoBehaviour
                 SceneManager.LoadScene("MainTitle");
                 break;
             default:
+                PlayerPrefs.SetInt("Chapter4", 1); // 클리어 여부 저장
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f);
                 nextButton.SetActive(true);
                 break;
@@ -145,5 +146,20 @@ partial class EduOxygenMask : MonoBehaviour
             else maskStrap.GetComponent<SkinnedMeshRenderer>().material = maskStrap_highlightMat_origin;
             StartCoroutine("MaskStrapUX", cnt + 1);
         }
+    }
+}
+partial class EduOxygenMask
+{
+    public void popup_reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void popup_toMainTitle()
+    {
+        SceneManager.LoadScene("MainTitle");
+    }
+    public void popup_exitPopup(GameObject popup)
+    {
+        popup.SetActive(false);
     }
 }

@@ -70,6 +70,7 @@ partial class EduGuideRulesManager : MonoBehaviour
                 isButtonClicked = false;
                 break;
             case 15: // 승무원 설명 끝 -> 메인화면 복귀
+                PlayerPrefs.SetInt("Chapter3", 1); // 클리어 여부 저장
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
                 SceneManager.LoadScene("MainTitle");
                 break;
@@ -156,5 +157,21 @@ partial class EduGuideRulesManager : MonoBehaviour
 
         // 다음 스크립트로
         NextButtonOnClick();
+    }
+}
+
+partial class EduGuideRulesManager
+{
+    public void popup_reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void popup_toMainTitle()
+    {
+        SceneManager.LoadScene("MainTitle");
+    }
+    public void popup_exitPopup(GameObject popup)
+    {
+        popup.SetActive(false);
     }
 }

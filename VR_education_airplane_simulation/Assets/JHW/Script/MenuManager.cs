@@ -27,9 +27,17 @@ partial class MenuManager : MonoBehaviour
 
     [SerializeField] GameObject discription_edu;
 
+    // 챕터 클리어했는지 여부 검사
+    [Header("== 챕터 클리어 여부 검사 ==")]
+    [SerializeField] List<Image> ChapterImageList;
+
+    [SerializeField] Sprite isClearedChapter;
+
     private void Start()
     {
         StartCoroutine(InitDropdown());
+
+        PlayerDataLoad();
     }
 
     // 튜토리얼 버튼 클릭시
@@ -176,9 +184,11 @@ partial class MenuManager : MonoBehaviour
             if (LocalizationSettings.SelectedLocale == locale)
                 selected = i;
 
-            //if(locale.name=="Korean" || locale.name == "English") 
-            options.Add(new TMP_Dropdown.OptionData(locale.name));
+            if (locale.name== "Korean (South Korea) (ko-KR)") options.Add(new TMP_Dropdown.OptionData("한국어"));
+            if (locale.name == "English (en)") options.Add(new TMP_Dropdown.OptionData("English"));
+            //options.Add(new TMP_Dropdown.OptionData(locale.name));
         }
+
         dropdown_localization.options = options;
 
         dropdown_localization.value = selected;
@@ -187,7 +197,9 @@ partial class MenuManager : MonoBehaviour
 
     static void LocaleSelected(int index)
     {
-        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+        if (index == 0) LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[1];
+        if (index == 1) LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[6];
+        //LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
     }
 
     // 교육에 포인터 올리면 설명 변함
@@ -198,4 +210,26 @@ partial class MenuManager : MonoBehaviour
     }
 
     // 교육 클리어했는지 여부 검사
+    private void PlayerDataLoad()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            // 버튼 활성화 및 텍스트 불투명도 수정 + 이미지 불투명도 원래대로
+            ChapterImageList[i].GetComponent<UnityEngine.UI.Button>().interactable = true;
+            ChapterImageList[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.white;
+            ChapterImageList[i].transform.GetChild(1).GetComponent<Image>().color = Color.white;
+
+            // 클리어 한 경우
+            if (PlayerPrefs.GetInt("Chapter" + (i + 1).ToString()) != 0)
+            {
+                ChapterImageList[i].sprite = isClearedChapter;
+            }
+            // 클리어 안한 경우
+            else
+            {
+                break;
+            }
+        }
+        
+    }
 }

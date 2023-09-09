@@ -94,6 +94,7 @@ partial class BackrestAngleManager : MonoBehaviour
                 nextButton.SetActive(false);
                 break;
             case 20: // 메인 화면으로 이동
+                PlayerPrefs.SetInt("Chapter2", 1); // 클리어 여부 저장
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
                 SceneManager.LoadScene("MainTitle");
                 break;

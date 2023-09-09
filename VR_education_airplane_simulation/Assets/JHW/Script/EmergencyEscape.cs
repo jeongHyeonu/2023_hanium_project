@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class EmergencyEscape : MonoBehaviour
+public partial class EmergencyEscape : MonoBehaviour
 {
     // 마지막 자막 스크립트 인덱스 번호
     static private int MAX_SCRIPT_INDEX = 32;
@@ -222,6 +222,7 @@ public class EmergencyEscape : MonoBehaviour
                 nextButton.SetActive(true);
                 break;
             case 32:// 메인화면 복귀 - 수고하셨습니다. 메인 메뉴로 이동하겠습니다.
+                PlayerPrefs.SetInt("Chapter7", 1); // 클리어 여부 저장
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
                 SceneManager.LoadScene("MainTitle");
                 break;
@@ -361,5 +362,21 @@ public class EmergencyEscape : MonoBehaviour
             StartCoroutine(CheckHandPos());
         }
 
+    }
+}
+
+partial class EmergencyEscape
+{
+    public void popup_reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void popup_toMainTitle()
+    {
+        SceneManager.LoadScene("MainTitle");
+    }
+    public void popup_exitPopup(GameObject popup)
+    {
+        popup.SetActive(false);
     }
 }

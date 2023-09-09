@@ -73,6 +73,7 @@ public partial class AntiShockPostureManager : MonoBehaviour
                 StartCoroutine(CheckHandPos());
                 break;
             case 7: // 승무원 설명 끝 -> 메인화면 복귀
+                PlayerPrefs.SetInt("Chapter6", 1);
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
                 SceneManager.LoadScene("MainTitle");
                 break;
@@ -163,5 +164,21 @@ partial class AntiShockPostureManager {
         }
         yield return new WaitForSeconds(.1f);
         StartCoroutine(CheckHandPos());
+    }
+}
+
+partial class AntiShockPostureManager
+{
+    public void popup_reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void popup_toMainTitle()
+    {
+        SceneManager.LoadScene("MainTitle");
+    }
+    public void popup_exitPopup(GameObject popup)
+    {
+        popup.SetActive(false);
     }
 }

@@ -232,6 +232,7 @@ public partial class lifeJacket {
                 nextButton.SetActive(true);
                 break;
             case 12:
+                PlayerPrefs.SetInt("Chapter5", 1); // 클리어 여부 저장
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
                 SceneManager.LoadScene("MainTitle");
                 break;
@@ -300,3 +301,18 @@ public partial class lifeJacket
     }
 }
 
+partial class lifeJacket
+{
+    public void popup_reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void popup_toMainTitle()
+    {
+        SceneManager.LoadScene("MainTitle");
+    }
+    public void popup_exitPopup(GameObject popup)
+    {
+        popup.SetActive(false);
+    }
+}

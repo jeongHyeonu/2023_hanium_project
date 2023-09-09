@@ -73,6 +73,7 @@ partial class BeltManager : MonoBehaviour
                 BeltUX_object.GetComponent<BeltUX>().BeltOff_UX();
                 break;
             case 7:
+                PlayerPrefs.SetInt("Chapter1", 1); // 클리어 여부 저장
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
                 SceneManager.LoadScene("MainTitle");
                 break;
@@ -157,5 +158,29 @@ partial class BeltManager : MonoBehaviour
         beltEndPos2.transform.GetChild(1).gameObject.SetActive(false);
         scriptIndex++;
         StartCoroutine(NextScript());
+    }
+}
+
+// 팝업 관련
+partial class BeltManager
+{
+
+    public void popup_reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void popup_toMainTitle()
+    {
+        SceneManager.LoadScene("MainTitle");
+    }
+
+    public void popup_openPopup(GameObject popup)
+    {
+        popup.SetActive(true);
+    }
+    public void popup_exitPopup(GameObject popup)
+    {
+        popup.SetActive(false);
     }
 }
