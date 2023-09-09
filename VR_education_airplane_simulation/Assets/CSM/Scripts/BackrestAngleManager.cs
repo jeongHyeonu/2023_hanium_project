@@ -371,3 +371,19 @@ partial class BackrestAngleManager : MonoBehaviour
         }
     }
 }
+
+partial class BackrestAngleManager
+{
+    public void popup_reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void popup_toMainTitle()
+    {
+        SceneManager.LoadScene("MainTitle");
+    }
+    public void popup_exitPopup(GameObject popup)
+    {
+        popup.SetActive(false);
+    }
+}

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.38825688, g: 0.7281151, b: 0.7341303, a: 1}
+  m_IndirectSpecularColor: {r: 0.38810045, g: 0.7278148, b: 0.7324987, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -236,6 +236,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5273822101931337817, guid: 65847589f926b734d9eaed6e25f0046b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4a3b1ce2cbf1b0d42bf6e98602387aae,
+        type: 3}
     - target: {fileID: 6490105433537340404, guid: 65847589f926b734d9eaed6e25f0046b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -8951,7 +8957,7 @@ MonoBehaviour:
   xrOriginMovePos: {fileID: 916464249}
   leftHandle: {fileID: 286735555}
   rightHandle: {fileID: 1649130947}
-  jacketTube: {fileID: 1068803715}
+  jacketTube: {fileID: 7505537920917948753}
   scriptText: {fileID: 788866403}
   localizeStringEvent: {fileID: 788866402}
   nextButton: {fileID: 1753837822}
@@ -8977,7 +8983,7 @@ Transform:
   m_Children:
   - {fileID: 270010085}
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &778567254
 GameObject:
@@ -12054,12 +12060,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
---- !u!1 &1068803715 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -1717834115375385870, guid: 46a64e51825137e408e5021346bbc506,
-    type: 3}
-  m_PrefabInstance: {fileID: 486005316}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1087246348
 GameObject:
   m_ObjectHideFlags: 0
@@ -21401,7 +21401,7 @@ Transform:
   m_Children:
   - {fileID: 601459646}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1870652629
 GameObject:
