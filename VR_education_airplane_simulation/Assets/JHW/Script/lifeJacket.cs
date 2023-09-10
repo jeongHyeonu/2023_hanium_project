@@ -184,6 +184,9 @@ public partial class lifeJacket {
     // 자막 다음버튼
     [SerializeField] GameObject nextButton;
 
+    // 실습 후 등장 이미지
+    [SerializeField] GameObject CanvasImage;
+
     // 다음 자막 읽어오기
     public int scriptIndex = 0;
 
@@ -228,6 +231,12 @@ public partial class lifeJacket {
                 rightHandle.SetActive(true);
                 break;
             case 8: // 부풀리기 완료
+                CanvasImage.SetActive(true);
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
+            case 9:
+                CanvasImage.SetActive(false);
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f);
                 nextButton.SetActive(true);
                 break;
