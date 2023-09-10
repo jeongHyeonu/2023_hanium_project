@@ -2280,8 +2280,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4694295681900607550, guid: 65847589f926b734d9eaed6e25f0046b,
         type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694295681900607550, guid: 65847589f926b734d9eaed6e25f0046b,
+        type: 3}
       propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
       value: GUID:454d9c3538dad914dbdf23b0f3bc977e
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694295681900607550, guid: 65847589f926b734d9eaed6e25f0046b,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694295681900607550, guid: 65847589f926b734d9eaed6e25f0046b,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 644694062}
+    - target: {fileID: 4694295681900607550, guid: 65847589f926b734d9eaed6e25f0046b,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694295681900607550, guid: 65847589f926b734d9eaed6e25f0046b,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_text
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694295681900607550, guid: 65847589f926b734d9eaed6e25f0046b,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TMPro.TMP_Text, Unity.TextMeshPro
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694295681900607550, guid: 65847589f926b734d9eaed6e25f0046b,
+        type: 3}
+      propertyPath: m_UpdateString.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5187250346472091421, guid: 65847589f926b734d9eaed6e25f0046b,
         type: 3}
@@ -2361,6 +2396,18 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
+--- !u!114 &644694062 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 531026876543504916, guid: 65847589f926b734d9eaed6e25f0046b,
+    type: 3}
+  m_PrefabInstance: {fileID: 644694058}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &661888356
 GameObject:
   m_ObjectHideFlags: 0
