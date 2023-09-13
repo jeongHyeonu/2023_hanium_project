@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 partial class EduOxygenMask : MonoBehaviour
@@ -33,16 +34,29 @@ partial class EduOxygenMask : MonoBehaviour
 
         localizeStringEvent.StringReference.SetReference("EduOxygenMask_StringTable", key);
         string scriptValue = localizeStringEvent.StringReference.GetLocalizedString(key);
-        TextToSpeach.Instance.SpeechText(scriptValue);
-        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("");
+        TextToSpeach.Instance.SpeechText(scriptValue.Replace('\n', ' '));
+
+        // 자막바 크기조정 및 스프라이트 변경
+        RectTransform rect = scriptText.transform.parent.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 50 + (scriptValue.Split("\n").Length - 1) * 20);
+        scriptText.transform.parent.GetComponent<Image>().sprite = stewardess.GetComponent<Stewardess>().textSprites[scriptValue.Split("\n").Length - 1];
+
+        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("").SetEase(Ease.Linear);
+        stewardess.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
         stewardess.GetComponent<Animator>().SetBool("Talk", true);
+        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(); // Talk 애니메이션 랜덤조정
 
         switch (scriptIndex)
         {
             case 2: // 실습 - 떨어진 산소마스크를 잡아 앞에 있는 승객에게 씌워주세요.
                 npc.SetActive(true);
                 mask.SetActive(true);
-                mask.transform.DOLocalMoveY(0f, 4f);
+
+                // 마스크 착용 모션
+                stewardess.GetComponent<Animator>().SetBool("Talk", false);
+                stewardess.GetComponent<Stewardess>().MaskEquipAnim();
+
+                mask.transform.DOLocalMoveY(0f, 4.5f);
                 break;
             case 7:
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
@@ -76,6 +90,12 @@ partial class EduOxygenMask : MonoBehaviour
     [SerializeField] GameObject maskEndPos; // 산소마스크 끝 위치 오브젝트
     [SerializeField] GameObject maskDropPos; // 산소마스크 드랍 위치 오브젝트
 
+    [SerializeField] GameObject maskStrap; // 산소마스크 스트랩
+    [SerializeField] GameObject maskStrap_indicator; // 산소마스크 스트랩 - 강조 화살표
+    [SerializeField] Material maskStrap_highlightMat; // 산소마스크 스트랩 - 강조 매터리얼(빨강)
+    [SerializeField] Material maskStrap_highlightMat_origin; // 산소마스크 스트랩 - 원래 매터리얼
+    [SerializeField] GameObject maskStrap_highlightBone; // 산소마스크 스트랩 조일때 bone(amature)
+
     public void MaskSelectEntered()
     {
         // UX 끄기
@@ -89,10 +109,11 @@ partial class EduOxygenMask : MonoBehaviour
         maskDropPos.SetActive(false);
         if (Vector3.Distance(maskEndPos.transform.position, maskDropPos.transform.position) < 0.4f)
         {
+            maskEndPos.GetComponent<XRGrabInteractable>().enabled = false;
             maskEndPos.transform.SetParent(npc_head.transform);
-            //UnityEditor.TransformWorldPlacementJSON:{ "position":{ "x":-2.487746000289917,"y":6.484857082366943,"z":15.653846740722657},"rotation":{ "x":0.44855767488479617,"y":0.5209577679634094,"z":0.40008866786956789,"w":-0.606076180934906},"scale":{ "x":8.571427345275879,"y":8.571430206298829,"z":8.571429252624512} }
-            maskEndPos.transform.DOMove(new Vector3(-2.487746000289917f, 6.484857082366943f, 15.653846740722657f),4f);
-            maskEndPos.transform.DOLocalRotate(new Vector3(265f, 0f, 10f), 4f);
+            //UnityEditor.TransformWorldPlacementJSON:{"position":{"x":-2.4155960083007814,"y":6.399694442749023,"z":16.067296981811525},"rotation":{"x":-0.40882986783981326,"y":-0.5377156138420105,"z":-0.320950984954834,"w":0.6638607382774353},"scale":{"x":7.499998569488525,"y":7.500002384185791,"z":7.500000476837158}}
+            maskEndPos.transform.DOMove(new Vector3(-2.4155960083007814f, 6.399694442749023f, 16.067296981811525f), 2f).OnComplete(() => { maskStrap_indicator.SetActive(true); StartCoroutine(MaskStrapUX()); }); // 마스크 이동 다하면 스트랩 ux 실행
+            maskEndPos.transform.DOLocalRotate(new Vector3(265f, 0f, 10f), 2f);
 
             // 다음 스크립트로
             scriptIndex++;
@@ -106,5 +127,22 @@ partial class EduOxygenMask : MonoBehaviour
             maskEndPos.transform.position = maskStartPos.transform.position;
         }
 
+    }
+
+    IEnumerator MaskStrapUX(int cnt=0)
+    {
+        if (cnt == 8)
+        {
+            maskStrap_indicator.SetActive(false);
+            maskStrap_highlightBone.transform.DOScale(new Vector3(.1f, .1f, .1f),3f);
+            yield return null;
+        }
+        else
+        {
+            yield return new WaitForSeconds(.5f);
+            if(cnt%2==0) maskStrap.GetComponent<SkinnedMeshRenderer>().material = maskStrap_highlightMat;
+            else maskStrap.GetComponent<SkinnedMeshRenderer>().material = maskStrap_highlightMat_origin;
+            StartCoroutine("MaskStrapUX", cnt + 1);
+        }
     }
 }

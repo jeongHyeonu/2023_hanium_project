@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 partial class lifeJacket : MonoBehaviour
@@ -33,18 +33,13 @@ partial class lifeJacket : MonoBehaviour
     private Vector3 originBeltStartPos;
     private Vector3 originBeltEndPos;
 
-    private void Start()
-    {
-        originLifeJacketPos = this.transform.position;
-        originBeltStartPos = BeltStartPos.transform.position;
-        originBeltEndPos = BeltEndPos.transform.position;
-    }
 
-    public void JacketSelectEntered(XRBaseInteractor interactor)
+
+    public void JacketSelectEntered()
     {
         lifeJacketDropPos.SetActive(true);
     }
-    public void JacketSelectExited(XRBaseInteractor interactor)
+    public void JacketSelectExited()
     {
         Debug.Log(originLifeJacketPos); // 원래 구명조끼 위치
         Debug.Log(transform.position); // 오른손 놓았을 때 좌표
@@ -60,13 +55,10 @@ partial class lifeJacket : MonoBehaviour
         this.gameObject.SetActive(false);
         equipedJacket.SetActive(true);
         // 자막 변경
-        string key = "lifeJacket_script3";
-        txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
-        TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
-        txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
-        stewardess.GetComponent<Animator>().SetBool("Talk", true);
+        scriptIndex++;
+        StartCoroutine(NextScript());
     }
-    public void JacketBeltSelectEntered(XRBaseInteractor interactor)
+    public void JacketBeltSelectEntered()
     {
 
         // UX OFF/ON
@@ -92,19 +84,9 @@ partial class lifeJacket : MonoBehaviour
         BeltGrabUX.SetActive(true);
         BeltDropUX.SetActive(false);
 
-        // 자막 변경
-        string key = "lifeJacket_script4";
-        txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
-        TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
-        txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
-        stewardess.GetComponent<Animator>().SetBool("Talk", true);
-
         // 상호작용 불가능하게 변경
         BeltStartPos.transform.parent.GetComponent<XRGrabInteractable>().enabled = false;
         BeltStartPos.transform.parent.GetChild(1).gameObject.SetActive(false);
-
-        // 자막 다 읽고나서 이동
-        StartCoroutine(MoveToExit(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3.0f));
 
         for (int i = 0; i < CharacterCenter.transform.childCount; i++)
         {
@@ -113,7 +95,9 @@ partial class lifeJacket : MonoBehaviour
         }
         beltPos[CharacterCenter.transform.childCount - 1].transform.rotation = Quaternion.Euler(180, 0, 90);
 
-
+        // 다음 자막으로
+        scriptIndex++;
+        StartCoroutine(NextScript());
     }
 }
 
@@ -132,41 +116,6 @@ partial class lifeJacket
 
     bool isRightSelected;
     bool isLeftSelected;
-
-    IEnumerator MoveToExit(float _duration)
-    {
-        // 자막 다 읽을때까지 대기
-        yield return new WaitForSeconds(_duration);
-
-        // 플레이어, npc 이동
-        npcObj.transform.GetComponent<Transform>().position = npcMovePos.position;
-        xrOriginObj.transform.GetComponent<Transform>().position = xrOriginMovePos.position;
-
-        // 자막 변경
-        string key = "lifeJacket_script5";
-        txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
-        TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
-        txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
-        stewardess.GetComponent<Animator>().SetBool("Talk", true);
-        // 자막 다 읽으면 다음 스크립트 진행
-        StartCoroutine(InflateJacket(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3.0f));
-    }
-
-    IEnumerator InflateJacket(float _duration)
-    {
-        // 자막 다 읽을때까지 대기
-        yield return new WaitForSeconds(_duration);
-
-        // 자막 변경
-        string key = "lifeJacket_script6";
-        txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
-        TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
-        txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
-        stewardess.GetComponent<Animator>().SetBool("Talk", true);
-        // 왼쪽 손잡이, 오른쪽 손잡이 setActive true
-        leftHandle.SetActive(true);
-        rightHandle.SetActive(true);
-    }
 
     public void leftHandleSelected()
     {
@@ -202,38 +151,128 @@ partial class lifeJacket
         leftHandle.SetActive(false);
         rightHandle.SetActive(false);
 
-        // 자막 변경
-        string key = "lifeJacket_script7";
-        txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
-        TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
-        txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
-        stewardess.GetComponent<Animator>().SetBool("Talk", true);
-
-        StartCoroutine(NextScript(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3f,8)); // 다음 스크립트로
+        scriptIndex++;
+        StartCoroutine(NextScript()); // 다음 스크립트로
     }
 
-    IEnumerator NextScript(float _duration, int _key)
+
+}
+
+public partial class lifeJacket {
+    // 자막
+    [SerializeField] TextMeshProUGUI scriptText;
+    [SerializeField] LocalizeStringEvent localizeStringEvent;
+    // 자막 다음버튼
+    [SerializeField] GameObject nextButton;
+
+    // 다음 자막 읽어오기
+    int scriptIndex = 0;
+
+    IEnumerator NextScript()
     {
-        // 자막 다 읽을때까지 대기
-        yield return new WaitForSeconds(_duration);
+        string key = "lifeJacket_script" + scriptIndex;
 
-        // 자막 변경
-        string key = "lifeJacket_script" + _key;
-        txt.GetComponent<LocalizeStringEvent>().StringReference.SetReference("LifeJacket_StringTable", key);
-        TextToSpeach.Instance.SpeechText(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key));
-        txt.DOText(txt.text, txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f).From("");
+        localizeStringEvent.StringReference.SetReference("LifeJacket_StringTable", key);
+        string scriptValue = localizeStringEvent.StringReference.GetLocalizedString(key);
+        TextToSpeach.Instance.SpeechText(scriptValue.Replace('\n', ' '));
+
+        // 자막바 크기조정 및 스프라이트 변경
+        RectTransform rect = scriptText.transform.parent.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 50 + (scriptValue.Split("\n").Length - 1) * 20);
+        scriptText.transform.parent.GetComponent<Image>().sprite = stewardess.GetComponent<Stewardess>().textSprites[scriptValue.Split("\n").Length - 1];
+
+        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("").SetEase(Ease.Linear);
+        stewardess.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
         stewardess.GetComponent<Animator>().SetBool("Talk", true);
+        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(); // Talk 애니메이션 랜덤조정
 
-        // 설명 다하면(key = 11 이면) 다음 교육 챕터로 이동, 아직 설명 다 안했으면 다음 스크립트실행
-        if (_key == 11) { Invoke("GoToMain", txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f + 3f); }
-        else { StartCoroutine(NextScript(txt.GetComponent<LocalizeStringEvent>().StringReference.GetLocalizedString(key).Length * 0.1f+3f, _key+1)); }
+        switch (scriptIndex)
+        {
+            case 2:
+                jacketBag.SetActive(true);
+                break;
+            case 5: // 비상구 이동
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
+                // 플레이어, npc 이동
+                npcObj.transform.GetComponent<Transform>().position = npcMovePos.position;
+                xrOriginObj.transform.GetComponent<Transform>().position = xrOriginMovePos.position;
+                scriptIndex++;
+                StartCoroutine(NextScript());
+                break;
+            case 6: // 구명복 부풀리기
+                leftHandle.SetActive(true);
+                rightHandle.SetActive(true);
+                break;
+            case 7: // 부풀리기 완료
+                InflateLifeJacket();
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
+            case 11:
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
+                SceneManager.LoadScene("MainTitle");
+                break;
+            default:
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
+        }
     }
 
-    void GoToMain()
+    public void NextButtonOnClick()
     {
-        // 타이틀로 이동
-        SceneManager.LoadScene("MainTitle");
+        scriptIndex++;
+
+        StartCoroutine(NextScript());
+        nextButton.SetActive(false);
+
+        // 사운드
+        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button1);
+    }
+
+    private void Start()
+    {
+        originLifeJacketPos = this.transform.position;
+        originBeltStartPos = BeltStartPos.transform.position;
+        originBeltEndPos = BeltEndPos.transform.position;
+
+        NextButtonOnClick();
+        //jacket_lifeJacketObj.SetActive(false);
     }
 }
 
+public partial class lifeJacket
+{
+    [SerializeField] GameObject jacket_model;
+    [SerializeField] GameObject jacket_grabUI;
+    [SerializeField] GameObject jacket_triggerUI;
+    [SerializeField] GameObject jacket_originPosObj;
+    [SerializeField] GameObject jacket_lifeJacketObj;
+    [SerializeField] GameObject jacketBag;
+
+    public void JacketBagSelected()
+    {
+        jacket_grabUI.SetActive(false);
+        jacket_triggerUI.SetActive(true);
+    }
+
+    public void JacketBagExited()
+    {
+        jacket_grabUI.SetActive(true);
+        jacket_triggerUI.SetActive(false);
+        jacket_model.gameObject.transform.position = jacket_originPosObj.transform.position;
+        //jacket_model.gameObject.transform.eulerAngles = Vector3.zero;
+    }
+
+    public void JacketBagTriggered()
+    {
+        jacket_model.SetActive(false);
+        jacket_lifeJacketObj.SetActive(true);
+        jacketBag.SetActive(false);
+
+        // 자막 변경
+        scriptIndex++;
+        StartCoroutine(NextScript());
+    }
+}
 

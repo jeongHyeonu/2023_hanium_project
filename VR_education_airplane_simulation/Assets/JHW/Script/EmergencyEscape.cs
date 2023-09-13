@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class EmergencyEscape : MonoBehaviour
@@ -65,10 +66,18 @@ public class EmergencyEscape : MonoBehaviour
 
         localizeStringEvent.StringReference.SetReference("EduEmergencyEscape_StringTable", key);
         string scriptValue = localizeStringEvent.StringReference.GetLocalizedString(key);
-        if (scriptText.text.Length < 50) scriptText.fontSize = 20; else scriptText.fontSize = 15; // 폰트 길이에 따라 크기조절
-        TextToSpeach.Instance.SpeechText(scriptValue);
-        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("");
+        TextToSpeach.Instance.SpeechText(scriptValue.Replace('\n', ' '));
+
+        // 자막바 크기조정 및 스프라이트 변경
+        RectTransform rect = scriptText.transform.parent.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 50 + (scriptValue.Split("\n").Length - 1) * 20);
+        scriptText.transform.parent.GetComponent<Image>().sprite = stewardess.GetComponent<Stewardess>().textSprites[scriptValue.Split("\n").Length - 1];
+
+        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("").SetEase(Ease.Linear); 
+        stewardess.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
         stewardess.GetComponent<Animator>().SetBool("Talk", true);
+        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(); // Talk 애니메이션 랜덤조정
+
 
         switch (scriptIndex)
         {
@@ -143,7 +152,7 @@ public class EmergencyEscape : MonoBehaviour
                 boat.SetActive(true);// 보트 활성화
                 slide.SetActive(false);// 슬라이드 비활성화
                 // 승무원 위치
-                stewardess.transform.position = new Vector3(boat_destination.transform.position.x-2f, boat_destination.transform.position.y-0.5f, boat_destination.transform.position.z);
+                stewardess.transform.position = new Vector3(boat_destination.transform.position.x-2f, boat_destination.transform.position.y-1f, boat_destination.transform.position.z);
                 stewardess.transform.localRotation = Quaternion.Euler(new Vector3(0, 90f, 0));
 
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f);
@@ -252,12 +261,13 @@ public class EmergencyEscape : MonoBehaviour
     private void DoorOpenAnim(GameObject _obj)
     {
         // 승무원 이동
-        stewardess.transform.DOLocalRotate(new Vector3(0,270f,0),0.1f);
+        stewardess.transform.DOLocalRotate(new Vector3(0,270f,0),0f);
         _obj.SetActive(false);
-        stewardess.transform.DOMove(new Vector3(_obj.transform.position.x,stewardess.transform.position.y,_obj.transform.position.z), 0.1f).OnComplete(() =>
+        stewardess.transform.DOMove(new Vector3(_obj.transform.position.x,stewardess.transform.position.y,_obj.transform.position.z), 0f).OnComplete(() =>
         {
             // 문 애니메이션
             Vector3 DoorLocalPos = Door.transform.localPosition;
+            stewardess.GetComponent<Animator>().SetBool("Talk", false);
             stewardess.GetComponent<Animator>().SetBool("Open", true);
             Door.transform.DOLocalMove(new Vector3(DoorLocalPos.x - 0.3f, DoorLocalPos.y, DoorLocalPos.z), 0.5f).OnComplete(() =>
             {
@@ -269,7 +279,7 @@ public class EmergencyEscape : MonoBehaviour
                     playerController1.transform.localRotation = Quaternion.Euler(new Vector3(0, -90f, 0)); // 카메라가 슬라이더를 향하도록
 
                     // 스튜디어스 위치
-                    stewardess.transform.position = new Vector3(slide_endPos.transform.position.x-2f, slide_endPos.transform.position.y-1f, slide_endPos.transform.position.z); 
+                    stewardess.transform.position = new Vector3(slide_endPos.transform.position.x-2f, slide_endPos.transform.position.y-1.2f, slide_endPos.transform.position.z); 
                     stewardess.transform.localRotation = Quaternion.Euler(new Vector3(0, 90f, 0));
 
                     scriptIndex++;

@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
 partial class BeltManager : MonoBehaviour
@@ -33,20 +34,42 @@ partial class BeltManager : MonoBehaviour
 
         localizeStringEvent.StringReference.SetReference("EduSafetyBelt_StringTable", key);
         string scriptValue = localizeStringEvent.StringReference.GetLocalizedString(key);
-        TextToSpeach.Instance.SpeechText(scriptValue);
-        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("");
+        TextToSpeach.Instance.SpeechText(scriptValue.Replace('\n', ' '));
+
+        // 자막바 크기조정 및 스프라이트 변경
+        RectTransform rect = scriptText.transform.parent.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 50 + (scriptValue.Split("\n").Length - 1) * 20);
+        scriptText.transform.parent.GetComponent<Image>().sprite = stewardess.GetComponent<Stewardess>().textSprites[scriptValue.Split("\n").Length - 1];
+
+        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("").SetEase(Ease.Linear);
+        stewardess.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
         stewardess.GetComponent<Animator>().SetBool("Talk", true);
+        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(); // Talk 애니메이션 랜덤조정
 
         switch (scriptIndex)
         {
-            case 3: // 승무원 설명 다 하면 벨트 오브젝트 활성화, 다음 버튼 비활성화, 승무원캠 off
+            case 2: // 비상등에 벨트 착용 조명 켜지면 벨트를 착용해주세요
+                beltImage.SetActive(true);
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
+            case 3: // 승무원 설명 다 하면 벨트 오브젝트 활성화, 다음 버튼 비활성화
+                beltImage.SetActive(false);
                 belt1.SetActive(true);
                 belt2.SetActive(true);
-                //cam.gameObject.SetActive(false);
+
+                // 스튜어디스 벨트매는 애니네이션
+                stewardess.GetComponent<Animator>().SetBool("Talk", false);
+                stewardess.GetComponent<Stewardess>().BeltEquipAnim();
+
+                // 벨트 UX
+                BeltUX_object.SetActive(true);
+                BeltUX_object.GetComponent<BeltUX>().BeltOn_UX();
                 break;
             case 6: // ux 및 상호작용 활성화
                 beltEndPos2.GetComponent<XRGrabInteractable>().enabled = true;
                 beltEndPos2.transform.GetChild(1).gameObject.SetActive(true);
+                BeltUX_object.GetComponent<BeltUX>().BeltOff_UX();
                 break;
             case 7:
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
@@ -79,6 +102,8 @@ partial class BeltManager : MonoBehaviour
     [SerializeField] GameObject beltLinekdPos1;
     [SerializeField] GameObject beltLinekdPos2;
     [SerializeField] GameObject beltLinekdPos3;
+    [SerializeField] GameObject BeltUX_object;
+    [SerializeField] GameObject beltImage;
 
     //[SerializeField] GameObject cam;
     bool isLinked;
@@ -108,6 +133,7 @@ partial class BeltManager : MonoBehaviour
         if (Vector3.Distance(beltEndPos2.transform.position, beltLinekdPos2.transform.position) > 0.07f) return;
 
         isLinked = true;
+        BeltUX_object.GetComponent<BeltUX>().BeltOnSucces();
         beltEndPos1.GetComponent<XRGrabInteractable>().enabled = false;
         beltEndPos2.GetComponent<XRGrabInteractable>().enabled = false;
         beltEndPos1.transform.localRotation = Quaternion.Euler(0f, 0f, -90f);
@@ -123,6 +149,7 @@ partial class BeltManager : MonoBehaviour
     {
         //벨트 연결 안되있으면 실행X
         if (!isLinked) return;
+        BeltUX_object.GetComponent<BeltUX>().BeltOffSucces();
         beltEndPos2.GetComponent<XRGrabInteractable>().enabled = false;
         beltEndPos1.transform.DOLocalRotate(new Vector3(0f, 0f, 0f), .5f); //.localRotation = Quaternion.Euler(0f, 0f, 0f);
         beltEndPos2.transform.DOLocalRotate(new Vector3(0f, 0f, 0f), .5f);

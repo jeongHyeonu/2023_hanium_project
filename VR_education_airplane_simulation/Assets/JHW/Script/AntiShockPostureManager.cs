@@ -1,26 +1,19 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class AntiShockPostureManager : MonoBehaviour
-{   
+public partial class AntiShockPostureManager : MonoBehaviour
+{
     // 자막
     [SerializeField] TextMeshProUGUI scriptText;
     [SerializeField] LocalizeStringEvent localizeStringEvent;
-
-    // 게임 오브젝트
-    [SerializeField] GameObject playerLeg;
-    [SerializeField] GameObject rightLegPos;
-    [SerializeField] GameObject leftLegPos;
-    [SerializeField] GameObject postureImage;
-    [SerializeField] GameObject leftHand;
-    [SerializeField] GameObject rightHand;
-
 
     // 자막 다음버튼
     [SerializeField] GameObject nextButton;
@@ -45,9 +38,17 @@ public class AntiShockPostureManager : MonoBehaviour
 
         localizeStringEvent.StringReference.SetReference("EduAntiShockPosture_StringTable", key);
         string scriptValue = localizeStringEvent.StringReference.GetLocalizedString(key);
-        TextToSpeach.Instance.SpeechText(scriptValue);
-        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("");
+        TextToSpeach.Instance.SpeechText(scriptValue.Replace('\n', ' '));
+
+        // 자막바 크기조정 및 스프라이트 변경
+        RectTransform rect = scriptText.transform.parent.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 50 + (scriptValue.Split("\n").Length - 1) * 20);
+        scriptText.transform.parent.GetComponent<Image>().sprite = stewardess.GetComponent<Stewardess>().textSprites[scriptValue.Split("\n").Length - 1];
+
+        scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("").SetEase(Ease.Linear);
+        stewardess.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
         stewardess.GetComponent<Animator>().SetBool("Talk", true);
+        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(); // Talk 애니메이션 랜덤조정
 
         switch (scriptIndex)
         {
@@ -56,17 +57,21 @@ public class AntiShockPostureManager : MonoBehaviour
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f);
                 nextButton.SetActive(true);
                 break;
-            case 7: // 실습
+            case 3:
+                postureImage.SetActive(false);
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
+            case 6: // 실습
                 postureImage.SetActive(false);
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f);
                 nextButton.SetActive(false);
                 playerLeg.SetActive(true);
                 rightLegPos.SetActive(true);
                 leftLegPos.SetActive(true);
-                leftLegPos.GetComponent<XRGrabInteractable>().enabled = true;
-                rightLegPos.GetComponent<XRGrabInteractable>().enabled = true;
+                StartCoroutine(CheckHandPos());
                 break;
-            case 8: // 승무원 설명 끝 -> 메인화면 복귀
+            case 7: // 승무원 설명 끝 -> 메인화면 복귀
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
                 SceneManager.LoadScene("MainTitle");
                 break;
@@ -87,41 +92,75 @@ public class AntiShockPostureManager : MonoBehaviour
         // 사운드
         SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button1);
     }
+}
 
-    public void grabLeg(GameObject leg)
-    {
-        // 어느 다리를 잡았는지에 대한 여부 저장, 거리가 크면(고개 숙이지 않았다면) 실행X
-        if (leg.name == "rightLegPos") {
-            if (Vector3.Distance(leftHand.transform.position, leftLegPos.transform.position) > 0.4f) return;
-            isRightLeg = true; 
-        }
-        else {
-            if (Vector3.Distance(rightHand.transform.position, rightLegPos.transform.position) > 0.4f) return;
-            isLeftLeg = true;
-        }
+partial class AntiShockPostureManager {
 
-        //Debug.Log(Vector3.Distance(leftHand.transform.position,leftLegPos.transform.position));
-        //Debug.Log(Vector3.Distance(rightHand.transform.position, rightLegPos.transform.position));
+    // 게임 오브젝트
+    [SerializeField] GameObject playerLeg;
+    [SerializeField] GameObject rightLegPos;
+    [SerializeField] GameObject leftLegPos;
+    [SerializeField] GameObject postureImage;
+    [SerializeField] GameObject leftHand;
+    [SerializeField] GameObject rightHand;
 
-        // UX OFF
-        leg.transform.GetChild(0).gameObject.SetActive(false);
 
-        if(isRightLeg&&isLeftLeg)
+    bool isHandOnLeg = false;
+
+    //public void grabLeg(GameObject leg)
+    //{
+    //    // 어느 다리를 잡았는지에 대한 여부 저장, 거리가 크면(고개 숙이지 않았다면) 실행X
+    //    if (leg.name == "rightLegPos") {
+    //        if (Vector3.Distance(leftHand.transform.position, leftLegPos.transform.position) > 0.4f) return;
+    //        isRightLeg = true;
+    //    }
+    //    else {
+    //        if (Vector3.Distance(rightHand.transform.position, rightLegPos.transform.position) > 0.4f) return;
+    //        isLeftLeg = true;
+    //    }
+
+    //    //Debug.Log(Vector3.Distance(leftHand.transform.position,leftLegPos.transform.position));
+    //    //Debug.Log(Vector3.Distance(rightHand.transform.position, rightLegPos.transform.position));
+
+    //    // UX OFF
+    //    leg.transform.GetChild(0).gameObject.SetActive(false);
+
+    //    if (isRightLeg && isLeftLeg)
+    //    {
+    //        leftLegPos.SetActive(false);
+    //        rightLegPos.SetActive(false);
+
+    //        scriptIndex++;
+    //        StartCoroutine(NextScript());
+    //    }
+    //}
+
+    //public void dropLeg(GameObject leg)
+    //{
+    //    // 어느 다리를 잡았는지에 대한 여부 저장
+    //    if (leg.name == "rightLegPos") isRightLeg = false; else isLeftLeg = false;
+
+    //    // UX ON
+    //    leg.transform.GetChild(0).gameObject.SetActive(true);
+    //}
+
+    public IEnumerator CheckHandPos(){
+        if (!isHandOnLeg)
         {
-            leftLegPos.SetActive(false);
-            rightLegPos.SetActive(false);
+            if (Vector3.Distance(leftHand.transform.position, leftLegPos.transform.position) < .2f &&
+                Vector3.Distance(rightHand.transform.position, rightLegPos.transform.position) < .2f)
+            {
+                isHandOnLeg = true;
+                StopCoroutine(CheckHandPos());
 
-            scriptIndex++;
-            StartCoroutine(NextScript());
+                leftLegPos.SetActive(false);
+                rightLegPos.SetActive(false);
+
+                scriptIndex++;
+                StartCoroutine(NextScript());
+            }
         }
-    }
-
-    public void dropLeg(GameObject leg)
-    {
-        // 어느 다리를 잡았는지에 대한 여부 저장
-        if (leg.name == "rightLegPos") isRightLeg = false; else isLeftLeg = false;
-
-        // UX ON
-        leg.transform.GetChild(0).gameObject.SetActive(true);
+        yield return new WaitForSeconds(.1f);
+        StartCoroutine(CheckHandPos());
     }
 }
