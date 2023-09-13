@@ -59,12 +59,19 @@ partial class EduOxygenMask : MonoBehaviour
 
                 mask.transform.DOLocalMoveY(0f, 4.5f);
                 break;
+            case 3:
+                stewardess.GetComponent<Stewardess>().headWeight.weight = 0f;
+                stewardess.GetComponent<Stewardess>().rightWeight.weight = 0f;
+                stewardess.GetComponent<Stewardess>().leftWeight.weight = 0f;
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
             case 7:
+                PlayerPrefs.SetInt("Chapter4", 1); // 클리어 여부 저장
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
                 SceneManager.LoadScene("MainTitle");
                 break;
             default:
-                PlayerPrefs.SetInt("Chapter4", 1); // 클리어 여부 저장
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f);
                 nextButton.SetActive(true);
                 break;

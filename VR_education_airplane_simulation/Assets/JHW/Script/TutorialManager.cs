@@ -52,7 +52,6 @@ public partial class TutorialManager : MonoBehaviour
 
     IEnumerator NextScript()
     {
-        curTextIndex++;
 
             // 자막바 크기조정 및 스프라이트 변경
             string scriptValue = localizeStringEvent.StringReference.GetLocalizedString("TutorialScript/tutorial_script" + curTextIndex);
@@ -106,7 +105,7 @@ public partial class TutorialManager : MonoBehaviour
         SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button1);
 
         // 튜토리얼 텍스트 인덱스가 최대치면 오브젝트 상호작용 연습으로, 아니면 다음 텍스트 출력 코루틴 실행
-        if (curTextIndex == maxTextIndex) StartPracticeTutorial();
+        if (curTextIndex++ >= maxTextIndex) StartPracticeTutorial();
         else StartCoroutine(NextScript());
     }
 
