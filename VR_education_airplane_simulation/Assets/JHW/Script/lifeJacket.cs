@@ -283,31 +283,40 @@ public partial class lifeJacket
     [SerializeField] GameObject jacket_lifeJacketObj;
     [SerializeField] GameObject jacketBag;
     [SerializeField] GameObject jacketGrabUI;
+    [SerializeField] GameObject jacket_dropObj;
 
     public void JacketBagSelected()
     {
         jacket_grabUI.SetActive(false);
-        jacket_triggerUI.SetActive(true);
+        //jacket_triggerUI.SetActive(true);
+        jacket_dropObj.SetActive(true);
     }
 
     public void JacketBagExited()
     {
-        jacket_grabUI.SetActive(true);
-        jacket_triggerUI.SetActive(false);
-        jacket_model.gameObject.transform.position = jacket_originPosObj.transform.position;
-        //jacket_model.gameObject.transform.eulerAngles = Vector3.zero;
+        if (Vector3.Distance(jacket_dropObj.transform.position, jacket_model.transform.position) < 0.3f)
+        {
+            jacket_dropObj.SetActive(false);
+            jacket_lifeJacketObj.transform.DOScale(.05f,2f).From(0f);
+            jacket_model.SetActive(false);
+            jacket_lifeJacketObj.SetActive(true);
+            jacketBag.SetActive(false);
+
+            // 자막 변경
+            scriptIndex++;
+            StartCoroutine(NextScript());
+        }
+        else
+        {
+            jacket_grabUI.SetActive(true);
+            jacket_triggerUI.SetActive(false);
+            jacket_model.gameObject.transform.position = jacket_originPosObj.transform.position;
+            jacket_dropObj.SetActive(false);
+            jacket_model.gameObject.transform.eulerAngles = Vector3.zero;
+        }
+
     }
 
-    public void JacketBagTriggered()
-    {
-        jacket_model.SetActive(false);
-        jacket_lifeJacketObj.SetActive(true);
-        jacketBag.SetActive(false);
-
-        // 자막 변경
-        scriptIndex++;
-        StartCoroutine(NextScript());
-    }
 }
 
 partial class lifeJacket

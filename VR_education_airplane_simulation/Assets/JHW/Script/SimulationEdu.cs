@@ -138,7 +138,8 @@ partial class SimulationEdu : MonoBehaviour
         {
             beltEndPos2.GetComponent<XRGrabInteractable>().enabled = false;
 
-            PlayerMoveToExit(); // 플레이어 비상구로 이동 
+            if (!isWaterLanding) PlayerMoveToExit_Landing(); // 비상탈출이면 플레이어 비상구로 이동 
+            else lifeJacketObject.SetActive(true); // 구명복 착용하게 구명복 등장
 
             beltEndPos2.transform.DOLocalRotate(new Vector3(0, 0, 0), 1f);
             beltEndPos1.transform.DOLocalRotate(new Vector3(0, 0, 0), 1f);
@@ -152,19 +153,19 @@ partial class SimulationEdu : MonoBehaviour
             // 벨트1 잡으면
             if (beltEndPos1.transform.parent == null)
             {
-                beltEndPos1.transform.GetChild(0).gameObject.SetActive(false);
+                //beltEndPos1.transform.GetChild(0).gameObject.SetActive(false);
             }
             // 벨트2 잡으면
             if (beltEndPos2.transform.parent == null)
             {
-                beltEndPos2.transform.GetChild(0).gameObject.SetActive(false);
+                //beltEndPos2.transform.GetChild(0).gameObject.SetActive(false);
             }
         }
     }
 
     public void beltSelectExited()
     {
-        beltLinekdPos3.transform.GetChild(0).gameObject.SetActive(false);
+        //beltLinekdPos3.transform.GetChild(0).gameObject.SetActive(false);
         if (isLinked) return;
         //Debug.Log(Vector3.Distance(beltEndPos1.transform.position, beltLinekdPos1.transform.position) + " " + Vector3.Distance(beltEndPos2.transform.position, beltLinekdPos2.transform.position));
         if (Vector3.Distance(beltEndPos1.transform.position, beltLinekdPos1.transform.position) > 0.07f) return;
@@ -177,6 +178,7 @@ partial class SimulationEdu : MonoBehaviour
         beltEndPos2.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
         beltEndPos1.transform.DOMove(beltLinekdPos1.transform.position, 0.5f);
         beltEndPos2.transform.DOMove(beltLinekdPos2.transform.position, 0.5f);
+        beltLinekdPos3.transform.GetChild(0).gameObject.SetActive(false);
 
         Phone.SetActive(true);
         phoneOff.SetActive(true);
@@ -191,7 +193,7 @@ partial class SimulationEdu : MonoBehaviour
         beltEndPos2.GetComponent<XRGrabInteractable>().enabled = false;
         beltEndPos1.transform.DOLocalRotate(new Vector3(0f, 0f, 0f), .5f); //.localRotation = Quaternion.Euler(0f, 0f, 0f);
         beltEndPos2.transform.DOLocalRotate(new Vector3(0f, 0f, 0f), .5f);
-        beltEndPos2.transform.GetChild(1).gameObject.SetActive(false);
+        //beltEndPos2.transform.GetChild(1).gameObject.SetActive(false);
         scriptIndex++;
         StartCoroutine(NextScript());
     }
@@ -212,8 +214,8 @@ partial class SimulationEdu : MonoBehaviour
     public void PhoneSelectEntered()
     {
         // UX On/Off
-        phoneOff.transform.GetChild(0).gameObject.SetActive(false);
-        phoneOff.transform.GetChild(1).gameObject.SetActive(true);
+        //phoneOff.transform.GetChild(0).gameObject.SetActive(false);
+        //phoneOff.transform.GetChild(1).gameObject.SetActive(true);
     }
 
     // 핸드폰 놓았을때
@@ -223,8 +225,8 @@ partial class SimulationEdu : MonoBehaviour
         phoneOff.transform.rotation = Quaternion.Euler(0, 0, 0);
 
         // UX On/Off
-        phoneOff.transform.GetChild(0).gameObject.SetActive(true);
-        phoneOff.transform.GetChild(1).gameObject.SetActive(false);
+        //phoneOff.transform.GetChild(0).gameObject.SetActive(true);
+        //phoneOff.transform.GetChild(1).gameObject.SetActive(false);
     }
 
     // 핸드폰 켰을때
@@ -244,7 +246,7 @@ partial class SimulationEdu : MonoBehaviour
 
         // UX
         airplaneButton.GetComponent<Image>().DOColor(new Color(0f, 1f, .5f, 1), .5f);
-        airplaneButton.transform.GetChild(1).gameObject.SetActive(false);
+        //airplaneButton.transform.GetChild(1).gameObject.SetActive(false);
 
         Invoke("Phone_OFF", 2f); // 2초 뒤 핸드폰 꺼짐
     }
@@ -286,11 +288,13 @@ partial class SimulationEdu : MonoBehaviour
                 StartCoroutine(DecompressionScript());
                 break;
             case 2:
+                isWaterLanding = false;
                 LandingObjects.SetActive(true);
                 WaterLandingObjects.SetActive(false);
                 StartCoroutine(LandingScript());
                 break;
             case 3:
+                isWaterLanding = true;
                 LandingObjects.SetActive(false);
                 WaterLandingObjects.SetActive(true);
                 StartCoroutine(WaterLandingScript());
@@ -303,6 +307,8 @@ partial class SimulationEdu : MonoBehaviour
     private void EducationCompleted()
     {
         postProcessManager.Instance.RedLightOff();
+        isHandOnLeg = false;
+        isLinked = true;
 
         string key = "SimulationEduCompleted";
         localizeStringEvent.StringReference.SetReference("EduSimulation_StringTable", key);
@@ -454,6 +460,8 @@ partial class SimulationEdu
     [SerializeField] GameObject MovePos5;
     [SerializeField] GameObject MovePos6;
 
+    bool isWaterLanding = false;
+
     bool isHandOnLeg = false;
 
     // 비상착륙 시나리오
@@ -499,7 +507,7 @@ partial class SimulationEdu
         }
     }
 
-    private void PlayerMoveToExit()
+    private void PlayerMoveToExit_Landing()
     {
         curtain.SetActive(false);
         Player_XR_Origin.transform.DOMove(MovePos1.transform.position, 2f).SetDelay(2f).OnComplete(() =>
@@ -579,6 +587,13 @@ partial class SimulationEdu
 {
     [Header("== WaterLandingSimulation ==")]
     [SerializeField] GameObject WaterLandingObjects;
+    [SerializeField] GameObject lifeJacketObject;
+    [SerializeField] GameObject lifeJacketBag;
+    [SerializeField] GameObject lifeJacketModel;
+    [SerializeField] GameObject jacktGrabUX;
+    [SerializeField] GameObject jacketTriggerUX;
+    [SerializeField] GameObject boatPosition;
+    [SerializeField] GameObject originLifeJacketPosition;
 
     // 비상착수 시나리오
     IEnumerator WaterLandingScript()
@@ -602,11 +617,117 @@ partial class SimulationEdu
 
         switch (scenarioIndex)
         {
+            case 3: // 충격방지자세 검사
+                RightLegPos.SetActive(true);
+                LeftLegPos.SetActive(true);
+                StartCoroutine(CheckHandPos_Seat_WaterLanding());
+                break;
+            case 8: // 벨트 풀고 비상착수
+                beltEndPos2.GetComponent<XRGrabInteractable>().enabled = true;
+                //lifeJacketObject.SetActive(true);
+                break;
+            case 9:
+                moveToBoat();
+                break;
             default:
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 2f);
                 scenarioIndex++;
-                StartCoroutine(NextScript());
+                StartCoroutine(WaterLandingScript());
                 break;
         }
+    }
+
+    public IEnumerator CheckHandPos_Seat_WaterLanding()
+    {
+        if (!isHandOnLeg)
+        {
+            if (Vector3.Distance(LeftHand_posture.transform.position, LeftLegPos.transform.position) < .2f &&
+                Vector3.Distance(RightHand_posture.transform.position, RightLegPos.transform.position) < .2f)
+            {
+                isHandOnLeg = true;
+                StopCoroutine(CheckHandPos_Seat_WaterLanding());
+
+                LeftLegPos.SetActive(false);
+                RightLegPos.SetActive(false);
+
+                scenarioIndex++;
+                StartCoroutine(WaterLandingScript());
+            }
+        }
+        yield return new WaitForSeconds(.1f);
+        StartCoroutine(CheckHandPos_Seat_WaterLanding());
+    }
+
+    private void PlayerMoveToExit_WaterLanding()
+    {
+        curtain.SetActive(false);
+        Player_XR_Origin.transform.DOMove(MovePos1.transform.position, 2f).SetDelay(2f).OnComplete(() =>
+        {
+            Player_XR_Origin.transform.DOMove(MovePos2.transform.position, 2f).OnComplete(() =>
+            {
+                Player_XR_Origin.transform.DOMove(MovePos3.transform.position, 4f).OnComplete(() =>
+                {
+                    Player_XR_Origin.transform.DOLocalRotate(new Vector3(0f, -90f, 0f), 1f);
+                    Player_XR_Origin.transform.DOMove(MovePos4.transform.position, 3f).OnComplete(() =>
+                    {
+                        scenarioIndex++;
+                        StartCoroutine(WaterLandingScript());
+                    });
+                });
+            });
+        });
+    }
+
+    private void moveToBoat()
+    {
+        Player_XR_Origin.transform.DOMove(boatPosition.transform.position,6f).SetEase(Ease.Linear).SetDelay(5f).OnComplete(()=> {
+            Ending_WaterLanding();
+        });
+    }
+
+    private void Ending_WaterLanding()
+    {
+        // 재사용을 위해 물체들 원상복귀
+        curtain.SetActive(true);
+
+        beltEndPos1.transform.localRotation = Quaternion.Euler(0f, 0f, -90f);
+        beltEndPos2.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
+
+        Player_XR_Origin.transform.position = Move_VR_Origin.transform.position; // 플레이어 카메라를 좌석 카메라로 이동
+        Player_XR_Origin.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        EducationCompleted();
+    }
+
+    public void EquipLifeJacket()
+    {
+        lifeJacketObject.SetActive(false);
+        lifeJacketBag.SetActive(true);
+        lifeJacketModel.SetActive(false);
+        lifeJacketModel.transform.position = originLifeJacketPosition.transform.position;
+        PlayerMoveToExit_WaterLanding();
+    }
+}
+
+// 팝업 관련
+partial class SimulationEdu
+{
+
+    public void popup_reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void popup_toMainTitle()
+    {
+        SceneManager.LoadScene("MainTitle");
+    }
+
+    public void popup_openPopup(GameObject popup)
+    {
+        popup.SetActive(true);
+    }
+    public void popup_exitPopup(GameObject popup)
+    {
+        popup.SetActive(false);
     }
 }
