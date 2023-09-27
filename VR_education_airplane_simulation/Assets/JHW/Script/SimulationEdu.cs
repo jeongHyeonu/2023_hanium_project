@@ -285,6 +285,8 @@ partial class SimulationEdu : MonoBehaviour
         switch (num)
         {
             case 1:
+                smoke1.Play();
+                smoke2.Play();
                 StartCoroutine(DecompressionScript());
                 break;
             case 2:
@@ -350,6 +352,8 @@ partial class SimulationEdu
     [SerializeField] GameObject GrabUX;
     [SerializeField] GameObject TriggerUX;
     [SerializeField] GameObject PlayerMaskOriginPos;
+    [SerializeField] ParticleSystem smoke1;
+    [SerializeField] ParticleSystem smoke2;
 
     // 화재 - 산소마스크 시나리오
     IEnumerator DecompressionScript()
@@ -388,6 +392,8 @@ partial class SimulationEdu
             case 4: // 안내 끝
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 2f);
                 scriptText.transform.parent.gameObject.SetActive(false); // 자막바 비활성화
+                smoke1.Stop();
+                smoke2.Stop();
                 break;
             default:
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 2f);
@@ -404,15 +410,15 @@ partial class SimulationEdu
     {
         // UX On/Off
         GrabUX.SetActive(false);
-        TriggerUX.SetActive(true);
+        //TriggerUX.SetActive(true);
     }
 
     // 마스크 손 놓으면 원래 위치로
     public void MaskSelectExited()
     {
         // UX On/Off
-        GrabUX.SetActive(true);
-        TriggerUX.SetActive(false);
+        //GrabUX.SetActive(true);
+        //TriggerUX.SetActive(false);
     }
 
     // 마스크 Trigger 시 (마스크 착용시) 실행
@@ -429,7 +435,7 @@ partial class SimulationEdu
             PlayerMask.transform.position = PlayerMaskOriginPos.transform.position;
             OxygenMasks.SetActive(false);
 
-            GrabUX.SetActive(true);
+            //GrabUX.SetActive(true);
             PlayerMask.GetComponent<XRGrabInteractable>().enabled = true;
             PlayerMask.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
@@ -543,8 +549,11 @@ partial class SimulationEdu
                 StartCoroutine(LandingScript());
             }
         }
-        yield return new WaitForSeconds(.1f);
-        StartCoroutine(CheckHandPos_Seat_Landing());
+        else
+        {
+            yield return new WaitForSeconds(.1f);
+            StartCoroutine(CheckHandPos_Seat_Landing());
+        }
     }
 
     IEnumerator CheckHandPos_Exit_Landing()
@@ -654,8 +663,11 @@ partial class SimulationEdu
                 StartCoroutine(WaterLandingScript());
             }
         }
-        yield return new WaitForSeconds(.1f);
-        StartCoroutine(CheckHandPos_Seat_WaterLanding());
+        else
+        {
+            yield return new WaitForSeconds(.1f);
+            StartCoroutine(CheckHandPos_Seat_WaterLanding());
+        }
     }
 
     private void PlayerMoveToExit_WaterLanding()
