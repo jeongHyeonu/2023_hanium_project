@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Localization;
 using Amazon.Polly;
 using TMPro;
+using UnityEngine.Localization.Components;
 
 // 메뉴화면 버튼
 partial class MenuManager : MonoBehaviour
@@ -17,14 +18,26 @@ partial class MenuManager : MonoBehaviour
     [SerializeField] GameObject mainTitle;
     [SerializeField] GameObject EssentialEdu;
     [SerializeField] GameObject SelectiveEdu;
+    [SerializeField] GameObject SimulationEdu;
+    [SerializeField] GameObject OXQuizEdu;
     [SerializeField] GameObject preferenceCanvas;
 
     [SerializeField] TMP_Dropdown dropdown_localization;
     [SerializeField] List<Sprite> language_sprites;
 
+    [SerializeField] GameObject discription_edu;
+
+    // 챕터 클리어했는지 여부 검사
+    [Header("== 챕터 클리어 여부 검사 ==")]
+    [SerializeField] List<Image> ChapterImageList;
+
+    [SerializeField] Sprite isClearedChapter;
+
     private void Start()
     {
         StartCoroutine(InitDropdown());
+
+        PlayerDataLoad();
     }
 
     // 튜토리얼 버튼 클릭시
@@ -39,6 +52,7 @@ partial class MenuManager : MonoBehaviour
     {
         mainTitle.SetActive(false);
         EssentialEdu.SetActive(true);
+        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
     }
 
 
@@ -47,15 +61,38 @@ partial class MenuManager : MonoBehaviour
     {
         mainTitle.SetActive(false);
         SelectiveEdu.SetActive(true);
+        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
+    }
+
+    // 가상 시나리오 교육 버튼 클릭시
+    public void MenuButton_SimulationEdu_OnMouseClick()
+    {
+        mainTitle.SetActive(false);
+        SimulationEdu.SetActive(true);
+        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
+    }
+
+    // OX 퀴즈 교육 버튼 클릭시
+    public void MenuButton_OXQuizEdu_OnMouseClick()
+    {
+        mainTitle.SetActive(false);
+        OXQuizEdu.SetActive(true);
+        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
     }
 
     // 뒤로 버튼
-    public void MenuButton_Back_OnMouseClick()
+    public void MenuButton_Back_OnMouseClick(GameObject CurrentCanvas)
     {
         mainTitle.SetActive(true);
-        EssentialEdu.SetActive(false); // 챕터 선택
-        SelectiveEdu.SetActive(false);
-        preferenceCanvas.SetActive(false);
+        CurrentCanvas.SetActive(false);
+        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
+    }
+
+    // 설정 버튼
+    public void MenuButton_Preference_OnMouseClick()
+    {
+        mainTitle.SetActive(false);
+        preferenceCanvas.SetActive(true);
         SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
     }
 
@@ -73,15 +110,18 @@ partial class MenuManager : MonoBehaviour
         // 버튼 클릭시 실행할 함수
         switch (chap_num)
         {
-            // 필수 안전교육
-            case 0: // 튜토리얼
+            // 장비 사용법
+            case 0: 
                 SceneManager.LoadScene("Tutorial");
                 break;
+
+            // 필수 안전교육
             case 1: // 안전벨트
                 SceneManager.LoadScene("EduSafetyBelt");
                 break;
-            //case 2:
-            //    break;
+            case 2:
+                SceneManager.LoadScene("EduBackrestAngle");
+                break;
             case 3:
                 SceneManager.LoadScene("EduGuideSafetyRules");
                 break;
@@ -106,20 +146,21 @@ partial class MenuManager : MonoBehaviour
                 SceneManager.LoadScene("EduPersonalProblem");
                 break;
 
+            // 가상 시나리오 교육
+            case 10:
+                SceneManager.LoadScene("SimulationEdu");
+                break;
+
+            // OX 퀴즈교육
+            //case 11:
+            //    break;
+
             default:
                 break;
         }
     }
 
-    // 설정 버튼
-    public void MenuButton_Preference_OnMouseClick()
-    {
-        //SceneManager.SetActiveScene(SceneManager.GetSceneByName("EduLifeJacket"));
-        // 버튼 클릭시 실행할 함수
-        mainTitle.SetActive(false);
-        preferenceCanvas.SetActive(true);
-        SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button2);
-    }
+
 
     // 언어 변경시
     public void OnChangeLanguage(TMP_Dropdown _dropdown)
@@ -142,8 +183,12 @@ partial class MenuManager : MonoBehaviour
             var locale = LocalizationSettings.AvailableLocales.Locales[i];
             if (LocalizationSettings.SelectedLocale == locale)
                 selected = i;
-            options.Add(new TMP_Dropdown.OptionData(locale.name));
+
+            if (locale.name== "Korean (South Korea) (ko-KR)") options.Add(new TMP_Dropdown.OptionData("한국어"));
+            if (locale.name == "English (en)") options.Add(new TMP_Dropdown.OptionData("English"));
+            //options.Add(new TMP_Dropdown.OptionData(locale.name));
         }
+
         dropdown_localization.options = options;
 
         dropdown_localization.value = selected;
@@ -152,6 +197,39 @@ partial class MenuManager : MonoBehaviour
 
     static void LocaleSelected(int index)
     {
-        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+        if (index == 0) LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[1];
+        if (index == 1) LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[6];
+        //LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
+    }
+
+    // 교육에 포인터 올리면 설명 변함
+    public void Button_OnMouseEnter(int num)
+    {
+        string key = "Menu_start_dis_" + num;
+        discription_edu.GetComponent<LocalizeStringEvent>().StringReference.SetReference("Menu_StringTable",key);
+    }
+
+    // 교육 클리어했는지 여부 검사
+    private void PlayerDataLoad()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            // 버튼 활성화 및 텍스트 불투명도 수정 + 이미지 불투명도 원래대로
+            ChapterImageList[i].GetComponent<UnityEngine.UI.Button>().interactable = true;
+            ChapterImageList[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().color = Color.white;
+            ChapterImageList[i].transform.GetChild(1).GetComponent<Image>().color = Color.white;
+
+            // 클리어 한 경우
+            if (PlayerPrefs.GetInt("Chapter" + (i + 1).ToString()) != 0)
+            {
+                ChapterImageList[i].sprite = isClearedChapter;
+            }
+            // 클리어 안한 경우
+            else
+            {
+                break;
+            }
+        }
+        
     }
 }

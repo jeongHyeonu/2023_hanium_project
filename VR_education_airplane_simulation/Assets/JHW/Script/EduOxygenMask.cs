@@ -11,6 +11,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 partial class EduOxygenMask : MonoBehaviour
 {
+    // 마지막 자막 스크립트 인덱스 번호
+    static private int MAX_SCRIPT_INDEX = 7;
+
     // 자막
     [SerializeField] TextMeshProUGUI scriptText;
     [SerializeField] LocalizeStringEvent localizeStringEvent;
@@ -42,9 +45,7 @@ partial class EduOxygenMask : MonoBehaviour
         scriptText.transform.parent.GetComponent<Image>().sprite = stewardess.GetComponent<Stewardess>().textSprites[scriptValue.Split("\n").Length - 1];
 
         scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("").SetEase(Ease.Linear);
-        stewardess.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
-        stewardess.GetComponent<Animator>().SetBool("Talk", true);
-        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(); // Talk 애니메이션 랜덤조정
+        stewardess.GetComponent<Stewardess>().RandomTalkAnimation(scriptIndex == MAX_SCRIPT_INDEX); // Talk 애니메이션 랜덤조정
 
         switch (scriptIndex)
         {
@@ -58,7 +59,15 @@ partial class EduOxygenMask : MonoBehaviour
 
                 mask.transform.DOLocalMoveY(0f, 4.5f);
                 break;
+            case 3:
+                stewardess.GetComponent<Stewardess>().headWeight.weight = 0f;
+                stewardess.GetComponent<Stewardess>().rightWeight.weight = 0f;
+                stewardess.GetComponent<Stewardess>().leftWeight.weight = 0f;
+                yield return new WaitForSeconds(scriptValue.Length * 0.1f);
+                nextButton.SetActive(true);
+                break;
             case 7:
+                PlayerPrefs.SetInt("Chapter4", 1); // 클리어 여부 저장
                 yield return new WaitForSeconds(scriptValue.Length * 0.1f + 3f);
                 SceneManager.LoadScene("MainTitle");
                 break;
@@ -144,5 +153,20 @@ partial class EduOxygenMask : MonoBehaviour
             else maskStrap.GetComponent<SkinnedMeshRenderer>().material = maskStrap_highlightMat_origin;
             StartCoroutine("MaskStrapUX", cnt + 1);
         }
+    }
+}
+partial class EduOxygenMask
+{
+    public void popup_reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void popup_toMainTitle()
+    {
+        SceneManager.LoadScene("MainTitle");
+    }
+    public void popup_exitPopup(GameObject popup)
+    {
+        popup.SetActive(false);
     }
 }

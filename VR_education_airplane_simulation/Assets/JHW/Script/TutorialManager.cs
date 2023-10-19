@@ -8,14 +8,19 @@ using UnityEngine.UI;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public partial class TutorialManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI scriptText;
     [SerializeField] GameObject nextButton;
     [SerializeField] GameObject tutorialInfo;
-    int curTextIndex;
-    int maxTextIndex;
+
+    // 승무원
+    [SerializeField] GameObject stewardess;
+
+    int curTextIndex = 0;
+    int maxTextIndex = 7;
 
     List<string> scriptList = new List<string>();
     string currentLanguage;
@@ -24,43 +29,60 @@ public partial class TutorialManager : MonoBehaviour
     void Start()
     {
         // 텍스트 파일 불러오기, 스크립트 담아놓고 나중에 tts 기능 넣을때 사용 예정
-        List<Dictionary<string, object>> list = CSVReader.Read("Localization/TutorialScript");
-        currentLanguage = LocalizationSettings.SelectedLocale.Identifier.CultureInfo.DisplayName;
+        //List<Dictionary<string, object>> list = CSVReader.Read("Localization/TutorialScript");
+        //currentLanguage = LocalizationSettings.SelectedLocale.Identifier.CultureInfo.DisplayName;
 
-        for (int i = 0; i < list.Count; i++)
-        {
-            switch (currentLanguage)
-            {
-                case "English":
-                    scriptList.Add(list[i]["English(en)"].ToString());
-                    break;
-                case "Korean":
-                    scriptList.Add(list[i]["Korean(ko)"].ToString());
-                    break;
-            }
-            // 튜토리얼 스크립트 아니면 리스트에 그만 담기
-            if (!list[i]["Key"].ToString().Contains("tutorial_script")) break;
-            maxTextIndex++;
-        }
-        curTextIndex = 0;
+        //for (int i = 0; i < list.Count; i++)
+        //{
+        //    switch (currentLanguage)
+        //    {
+        //        case "English":
+        //            scriptList.Add(list[i]["English(en)"].ToString());
+        //            break;
+        //        case "Korean":
+        //            scriptList.Add(list[i]["Korean(ko)"].ToString());
+        //            break;
+        //    }
+        //    // 튜토리얼 스크립트 아니면 리스트에 그만 담기
+        //    if (!list[i]["Key"].ToString().Contains("tutorial_script")) break;
+        //    maxTextIndex++;
+        //}
         StartCoroutine(NextScript());
     }
 
     IEnumerator NextScript()
     {
-        scriptText.text = "";
-        scriptText.DOText(scriptList[curTextIndex], (scriptList[curTextIndex]).Length * 0.1f);
+        curTextIndex++;
+        string key = "tutorial_script" + curTextIndex;
+
+        // 자막바 크기조정 및 스프라이트 변경
+        localizeStringEvent.StringReference.SetReference("TutorialScript", key);
+        string scriptValue = localizeStringEvent.StringReference.GetLocalizedString(key);
+        TextToSpeach.Instance.SpeechText(scriptValue.Replace('\n', ' '));
+
+        Debug.Log(scriptValue);
+
+            RectTransform rect = scriptText.transform.parent.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(rect.sizeDelta.x, 50 + (scriptValue.Split("\n").Length - 1) * 20);
+            scriptText.transform.parent.GetComponent<Image>().sprite = stewardess.GetComponent<Stewardess>().textSprites[scriptValue.Split("\n").Length - 1];
+
+            stewardess.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
+            stewardess.GetComponent<Animator>().SetBool("Talk", true);
+            stewardess.GetComponent<Stewardess>().RandomTalkAnimation(); // Talk 애니메이션 랜덤조정
+
+            scriptText.DOText(scriptValue, scriptValue.Length * 0.1f).From("").SetEase(Ease.Linear);
+
         // 글씨 크기에 따른 글씨 자막바 조정
         //if ((scriptList[curTextIndex]).Length >= 30) scriptText.transform.parent.GetComponent<RectTransform>().DOScaleY(1.5f, .5f);
         //else { scriptText.transform.parent.GetComponent<RectTransform>().DOScaleY(1f, .5f); }
-        TextToSpeach.Instance.SpeechText(scriptList[curTextIndex]);
-        yield return new WaitForSeconds((scriptList[curTextIndex]).Length * 0.1f);
+        
+        yield return new WaitForSeconds(scriptValue.Length * 0.1f);
         nextButton.SetActive(true);
+
     }
 
     public void NextButtonOnClick()
     {
-        curTextIndex++;
         switch (curTextIndex)
         {
             case 2:
@@ -88,7 +110,7 @@ public partial class TutorialManager : MonoBehaviour
         SoundManager.Instance.PlaySFX(SoundManager.SFX_list.button1);
 
         // 튜토리얼 텍스트 인덱스가 최대치면 오브젝트 상호작용 연습으로, 아니면 다음 텍스트 출력 코루틴 실행
-        if (curTextIndex == maxTextIndex) StartPracticeTutorial();
+        if (curTextIndex >= maxTextIndex) StartPracticeTutorial();
         else StartCoroutine(NextScript());
     }
 
@@ -124,6 +146,8 @@ partial class TutorialManager
         string key = "tutorial_grab";
         localizeStringEvent.StringReference.SetReference("TutorialScript", key);
         TextToSpeach.Instance.SpeechText(localizeStringEvent.StringReference.GetLocalizedString(key));
+
+
     }
     
     public void TutorialObject01Selected()
@@ -218,5 +242,23 @@ partial class TutorialManager
         }
 
 
+    }
+}
+
+
+
+partial class TutorialManager
+{
+    public void popup_reStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void popup_toMainTitle()
+    {
+        SceneManager.LoadScene("MainTitle");
+    }
+    public void popup_exitPopup(GameObject popup)
+    {
+        popup.SetActive(false);
     }
 }

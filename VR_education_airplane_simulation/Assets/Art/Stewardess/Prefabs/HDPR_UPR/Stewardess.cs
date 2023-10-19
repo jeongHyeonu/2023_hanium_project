@@ -14,6 +14,9 @@ public class Stewardess : MonoBehaviour
     [SerializeField] GameObject LeftArmTarget;
     [SerializeField] GameObject RightArmTarget;
 
+    [SerializeField] List<AnimationClip> randomMotions;
+    [SerializeField] AnimationClip saluteMotion;
+
     [SerializeField] public List<Sprite> textSprites;
 
     public Vector3 originHeadPos = new Vector3(0f, 1.5f, .5f);
@@ -33,13 +36,32 @@ public class Stewardess : MonoBehaviour
         this.GetComponent<Animator>().SetBool("Open", false);
     }
 
-    public void RandomTalkAnimation()
+    public void RandomTalkAnimation(bool isEnding=false)
     {
-        float lefthand = Random.Range(0f, .7f);
-        float righthand = Random.Range(0f, .7f);
+        //float lefthand = Random.Range(0f, .7f);
+        //float righthand = Random.Range(0f, .7f);
 
-        leftWeight.weight = lefthand;
-        rightWeight.weight = righthand; 
+        //leftWeight.weight = lefthand;
+        //rightWeight.weight = righthand;
+
+
+        // 모션 랜덤변경
+        var animator = GetComponent<Animator>();
+
+        AnimatorOverrideController animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
+        AnimationClip animationClip; 
+        if (isEnding) animationClip = saluteMotion;
+        else
+        {
+            int randomMotionNumber = Random.Range(0, randomMotions.Count);
+            animationClip = randomMotions[randomMotionNumber];
+        }
+        animationClip.name = "talk";
+        animatorOverrideController["talk"] = animationClip;
+        animator.runtimeAnimatorController = animatorOverrideController;
+
+        this.GetComponent<Animator>().SetBool("Talk", false); // 이미 true로 설정되어있는 경우가 있어서 false로 놓고 이후 true로 변경
+        this.GetComponent<Animator>().SetBool("Talk", true);
     }
 
     // 마스크 착용 실습시 승무원 모션
