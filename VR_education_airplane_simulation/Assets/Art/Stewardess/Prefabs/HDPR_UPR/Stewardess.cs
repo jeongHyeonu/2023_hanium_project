@@ -49,8 +49,13 @@ public class Stewardess : MonoBehaviour
         var animator = GetComponent<Animator>();
 
         AnimatorOverrideController animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
-        AnimationClip animationClip; 
-        if (isEnding) animationClip = saluteMotion;
+        AnimationClip animationClip;
+        if (isEnding)
+        {
+            leftWeight.weight = 0;
+            rightWeight.weight = 0;
+            animationClip = saluteMotion;
+        }
         else
         {
             int randomMotionNumber = Random.Range(0, randomMotions.Count);
