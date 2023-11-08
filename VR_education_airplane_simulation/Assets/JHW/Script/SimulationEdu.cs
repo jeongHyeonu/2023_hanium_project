@@ -548,11 +548,11 @@ partial class SimulationEdu
                 scenarioIndex++;
                 StartCoroutine(LandingScript());
             }
-        }
-        else
-        {
-            yield return new WaitForSeconds(.1f);
-            StartCoroutine(CheckHandPos_Seat_Landing());
+            else
+            {
+                yield return new WaitForSeconds(.1f);
+                StartCoroutine(CheckHandPos_Seat_Landing());
+            }
         }
     }
 
@@ -561,7 +561,7 @@ partial class SimulationEdu
         //Debug.Log(Vector3.Distance(LeftHandPos.transform.position, LeftHand_posture.transform.position) + ", " + Vector3.Distance(rightHand.transform.position, rightHandPos.transform.position));
 
         // 팔 뻗었는지 주기적으로 검사
-        if (Vector3.Distance(LeftHandPos.transform.position, LeftHand_posture.transform.position) < .15f && Vector3.Distance(RightHandPos.transform.position, RightHand_posture.transform.position) < .15f)
+        if (Vector3.Distance(LeftHandPos.transform.position, LeftHand_posture.transform.position) < .2f && Vector3.Distance(RightHandPos.transform.position, RightHand_posture.transform.position) < .2f)
         {
             LeftHandPos.SetActive(false);
             RightHandPos.SetActive(false);
@@ -662,11 +662,11 @@ partial class SimulationEdu
                 scenarioIndex++;
                 StartCoroutine(WaterLandingScript());
             }
-        }
-        else
-        {
-            yield return new WaitForSeconds(.1f);
-            StartCoroutine(CheckHandPos_Seat_WaterLanding());
+            else
+            {
+                yield return new WaitForSeconds(.1f);
+                StartCoroutine(CheckHandPos_Seat_WaterLanding());
+            }
         }
     }
 

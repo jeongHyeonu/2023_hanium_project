@@ -152,8 +152,9 @@ partial class MenuManager : MonoBehaviour
                 break;
 
             // OX ÄûÁî±³À°
-            //case 11:
-            //    break;
+            case 11:
+                SceneManager.LoadScene("QuizEducation");
+                break;
 
             default:
                 break;

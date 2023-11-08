@@ -76,6 +76,9 @@ public partial class SoundManager : MonoBehaviour {
         button3,
         button4,
         button5,
+        button6,
+        answer,
+        wrong,
     }
 
     private void Start()
